@@ -57,7 +57,7 @@ const Login: React.FC = () => {
       if (msg.status === 'ok') {
         const defaultLoginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
-          defaultMessage: '登录成功！',
+          defaultMessage: '석섹스！',
         });
         message.success(defaultLoginSuccessMessage);
         await fetchUserInfo();
@@ -74,7 +74,7 @@ const Login: React.FC = () => {
     } catch (error) {
       const defaultLoginFailureMessage = intl.formatMessage({
         id: 'pages.login.failure',
-        defaultMessage: '登录失败，请重试！',
+        defaultMessage: '실패！',
       });
       message.error(defaultLoginFailureMessage);
     }
