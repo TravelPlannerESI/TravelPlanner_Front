@@ -6,6 +6,7 @@ import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import { request } from 'umi';
 
 const isDev = process.env.NODE_ENV === 'development';
 const initPath = '/';
@@ -24,22 +25,31 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
-    try {
-      const msg = await queryCurrentUser();
-      return msg.data;
-    } catch (error) {
-      history.push(initPath);
-    }
     return undefined;
   };
-  if (history.location.pathname !== initPath) {
-    const currentUser = await fetchUserInfo();
-    return {
-      fetchUserInfo,
-      currentUser,
-      settings: defaultSettings,
-    };
+
+  const url = new URL(location);
+  const foo = url.searchParams.get('success');
+  console.log(foo);
+  if (foo === 'true') {
+    request('/api/v1/oauth/success', {
+      method: 'post',
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }
+  // if (history.location.pathname !== initPath) {
+  //   const currentUser = await fetchUserInfo();
+  //   return {
+  //     fetchUserInfo,
+  //     currentUser,
+  //     settings: defaultSettings,
+  //   };
+  // }
   return {
     fetchUserInfo,
     settings: defaultSettings,

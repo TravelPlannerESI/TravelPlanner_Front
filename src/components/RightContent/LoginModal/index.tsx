@@ -3,6 +3,9 @@ import googleLogo from './asset/google_login.png';
 import kakaoLogo from './asset/kakao_login_medium_narrow.png';
 import naverLogo from './asset/naver_login.png';
 
+const oauthLink = 'http://localhost:8095/oauth2/authorization/';
+const [google, kakao, naver] = ['google', 'kakao', 'naver'];
+
 const LoginModal = ({ visible, setVisible }: any) => {
   return (
     <>
@@ -28,7 +31,7 @@ const LoginModal = ({ visible, setVisible }: any) => {
               height: 80,
             }}
           >
-            <a href="/oauth/kakao">
+            <a href={`${oauthLink}${google}`}>
               <img src={googleLogo} width={200} height={50} />
             </a>
           </div>
@@ -39,7 +42,7 @@ const LoginModal = ({ visible, setVisible }: any) => {
               height: 80,
             }}
           >
-            <a href="/oauth/kakao">
+            <a href={`${oauthLink}${kakao}`}>
               <img src={kakaoLogo} width={200} height={50} />
             </a>
           </div>
@@ -50,7 +53,7 @@ const LoginModal = ({ visible, setVisible }: any) => {
               height: 80,
             }}
           >
-            <a href="/oauth/kakao">
+            <a href={`${oauthLink}${naver}`}>
               <img src={naverLogo} width={200} height={50} />
             </a>
           </div>

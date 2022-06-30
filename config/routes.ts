@@ -14,6 +14,12 @@
     ],
   },
   {
+    path: '/oauth/success',
+    layout: false,
+    name: 'welcome',
+    component: './Welcome',
+  },
+  {
     path: '/welcome',
     name: 'welcome',
     icon: 'smile',
