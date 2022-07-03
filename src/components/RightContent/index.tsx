@@ -1,3 +1,4 @@
+import { LoadingOutlined } from '@ant-design/icons';
 import { Button, Space } from 'antd';
 import React, { useState } from 'react';
 import { useModel } from 'umi';
@@ -7,11 +8,9 @@ import LoginModal from './LoginModal';
 
 export type SiderTheme = 'light' | 'dark';
 
-const GlobalHeaderRight: React.FC = ({ currentUser }: any) => {
+const GlobalHeaderRight: React.FC = () => {
   const { initialState } = useModel('@@initialState');
-  const [visible, setVisible] = useState<any>(false);
 
-  const loginPath = '/user/login';
   if (!initialState || !initialState.settings) {
     return null;
   }
@@ -23,22 +22,10 @@ const GlobalHeaderRight: React.FC = ({ currentUser }: any) => {
     className = `${styles.right}  ${styles.dark}`;
   }
 
-  const NoLoginComponent = () => {
-    return (
-      <>
-        <LoginModal visible={visible} setVisible={setVisible} />
-        <Button
-          type="primary"
-          onClick={() => {
-            setVisible(true);
-          }}
-        >
-          LOGIN
-        </Button>
-      </>
-    );
-  };
-
-  return <Space className={className}>{currentUser ? <Avatar /> : <NoLoginComponent />}</Space>;
+  return (
+    <Space className={className}>
+      {initialState?.currentUser ? <Avatar /> : <LoadingOutlined />}
+    </Space>
+  );
 };
 export default GlobalHeaderRight;

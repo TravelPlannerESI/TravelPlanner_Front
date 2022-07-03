@@ -5,7 +5,6 @@ import { useModel, history } from 'umi';
 import LoginModal from '../loginModal';
 import styles from './index.less';
 import caxios from '@/util/caxios';
-import GlobalHeaderRight from '@/components/RightContent';
 
 const Maps: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -27,7 +26,9 @@ const Maps: React.FC = () => {
           여행 플래너
         </div>
         <div style={{ width: '50%', float: 'right', textAlign: 'right' }}>
-          <GlobalHeaderRight />
+          <Button type="primary" onClick={() => setVisible(true)}>
+            LOGIN
+          </Button>
         </div>
       </div>
       <div className={styles.content}>

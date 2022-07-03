@@ -6,6 +6,8 @@ const { NODE_ENV } = process.env;
 
 const caxios: Axios = axios.create();
 
+console.log(`${apiServer[NODE_ENV].prefix}`);
+
 caxios.defaults.baseURL = `${apiServer[NODE_ENV || ''].prefix}`;
 caxios.defaults.timeout = 100000;
 caxios.defaults.withCredentials = true;

@@ -44,10 +44,9 @@ export async function getInitialState(): Promise<{
   const url = new URL(currentUrl);
   const params = url.searchParams.get('success');
 
-  console.log('params', params);
-
   if (history.location.pathname !== loginPath && params) {
     const currentUser = await fetchUserInfo();
+
     return {
       fetchUserInfo,
       currentUser,
