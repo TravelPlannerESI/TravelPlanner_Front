@@ -1,5 +1,19 @@
 ﻿export default [
   {
+    path: '/nologin',
+    layout: false,
+    routes: [
+      {
+        name: 'nologin-maps',
+        path: '/nologin/maps',
+        component: './nologin/Maps',
+      },
+      {
+        component: './404',
+      },
+    ],
+  },
+  /* {
     path: '/user',
     layout: false,
     routes: [
@@ -12,7 +26,7 @@
         component: './404',
       },
     ],
-  },
+  }, */
   {
     path: '/welcome',
     name: 'welcome',

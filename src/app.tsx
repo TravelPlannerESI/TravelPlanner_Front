@@ -7,8 +7,7 @@ import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 
-const isDev = process.env.NODE_ENV === 'development';
-const loginPath = '/user/login';
+const loginPath = '/nologin/maps';
 
 /** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
@@ -33,7 +32,7 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
-  // 如果不是登录页面，执行
+
   if (history.location.pathname !== loginPath) {
     const currentUser = await fetchUserInfo();
     return {
@@ -48,7 +47,6 @@ export async function getInitialState(): Promise<{
   };
 }
 
-// ProLayout 支持的api https://procomponents.ant.design/components/layout
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
     rightContentRender: () => <RightContent />,
@@ -59,23 +57,10 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      // 如果没有登录，重定向到 login
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }
     },
-    // links: isDev
-    //   ? [
-    //       <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-    //         <LinkOutlined />
-    //         <span>OpenAPI</span>
-    //       </Link>,
-    //       <Link to="/~docs" key="docs">
-    //         <BookOutlined />
-    //         <span>여긴 뭐야</span>
-    //       </Link>,
-    //     ]
-    //   : [],
     menuHeaderRender: undefined,
     childrenRender: (children, props) => {
       // if (initialState?.loading) return <PageLoading />;
