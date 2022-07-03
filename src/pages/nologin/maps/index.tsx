@@ -5,21 +5,12 @@ import { useModel, history } from 'umi';
 import LoginModal from '../loginModal';
 import styles from './index.less';
 import caxios from '@/util/caxios';
+import GlobalHeaderRight from '@/components/RightContent';
 
 const Maps: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const { REACT_APP_ENV } = process.env;
-
-  const fetchUserInfo = async () => {
-    const userInfo = await initialState?.fetchUserInfo?.();
-    if (userInfo) {
-      await setInitialState((s) => ({
-        ...s,
-        currentUser: userInfo,
-      }));
-    }
-  };
 
   const [visible, setVisible] = useState<boolean>(false);
 
@@ -36,9 +27,7 @@ const Maps: React.FC = () => {
           여행 플래너
         </div>
         <div style={{ width: '50%', float: 'right', textAlign: 'right' }}>
-          <Button type="primary" onClick={() => setVisible(true)}>
-            LOGIN
-          </Button>
+          <GlobalHeaderRight />
         </div>
       </div>
       <div className={styles.content}>

@@ -44,6 +44,8 @@ export async function getInitialState(): Promise<{
   const url = new URL(currentUrl);
   const params = url.searchParams.get('success');
 
+  console.log('params', params);
+
   if (history.location.pathname !== loginPath && params) {
     const currentUser = await fetchUserInfo();
     return {
@@ -58,6 +60,7 @@ export async function getInitialState(): Promise<{
   };
 }
 
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
     rightContentRender: () => <RightContent currentUser={initialState?.currentUser} />,
@@ -69,13 +72,7 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     onPageChange: () => {
       const { location } = history;
 
-      console.log('getCookie(COOKIE_NAME)', getCookie(COOKIE_NAME));
-
-      if (getCookie(COOKIE_NAME) && !initialState?.currentUser) {
-        console.log('시발');
-        getInitialState();
-      } else if (!initialState?.currentUser && location.pathname !== loginPath) {
-        console.log('시발2');
+      if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }
     },
