@@ -12,7 +12,6 @@ import { COOKIE_NAME, getCookie } from './util/cookie';
 
 const loginPath = '/nologin/maps';
 
-/** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
   loading: <PageLoading />,
 };
@@ -61,7 +60,7 @@ export async function getInitialState(): Promise<{
 
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
-    rightContentRender: () => <RightContent />,
+    rightContentRender: () => <RightContent currentUser={initialState?.currentUser} />,
     disableContentMargin: false,
     waterMarkProps: {
       content: initialState?.currentUser?.name,
