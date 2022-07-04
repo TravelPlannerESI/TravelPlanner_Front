@@ -5,12 +5,13 @@ import { PageLoading } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
+import initialState from './.umi/plugin-initial-state/models/initialState';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
+import caxios from './util/caxios';
+import { COOKIE_NAME, getCookie } from './util/cookie';
 
-const isDev = process.env.NODE_ENV === 'development';
-const loginPath = '/user/login';
+const loginPath = '/nologin/maps';
 
-/** 获取用户信息比较慢的时候会展示一个 loading */
 export const initialStateConfig = {
   loading: <PageLoading />,
 };
@@ -25,17 +26,27 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
-    try {
-      const msg = await queryCurrentUser();
-      return msg.data;
-    } catch (error) {
-      history.push(loginPath);
-    }
-    return undefined;
+    const { data: resData }: any = await caxios.post('/oauth/success').catch(() => {
+      history.push('/nologin/maps');
+    });
+
+    const returnData: any = {
+      name: resData.name,
+      avatar: resData.picture,
+      email: resData.email,
+      userid: resData.email,
+    };
+
+    return returnData;
   };
-  // 如果不是登录页面，执行
-  if (history.location.pathname !== loginPath) {
+
+  const currentUrl: any = window.location;
+  const url = new URL(currentUrl);
+  const params = url.searchParams.get('success');
+
+  if (history.location.pathname !== loginPath && params) {
     const currentUser = await fetchUserInfo();
+
     return {
       fetchUserInfo,
       currentUser,
@@ -48,10 +59,10 @@ export async function getInitialState(): Promise<{
   };
 }
 
-// ProLayout 支持的api https://procomponents.ant.design/components/layout
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
-    rightContentRender: () => <RightContent />,
+    rightContentRender: () => <RightContent currentUser={initialState?.currentUser} />,
     disableContentMargin: false,
     waterMarkProps: {
       content: initialState?.currentUser?.name,
@@ -59,23 +70,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      // 如果没有登录，重定向到 login
+
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         history.push(loginPath);
       }
     },
-    // links: isDev
-    //   ? [
-    //       <Link key="openapi" to="/umi/plugin/openapi" target="_blank">
-    //         <LinkOutlined />
-    //         <span>OpenAPI</span>
-    //       </Link>,
-    //       <Link to="/~docs" key="docs">
-    //         <BookOutlined />
-    //         <span>여긴 뭐야</span>
-    //       </Link>,
-    //     ]
-    //   : [],
     menuHeaderRender: undefined,
     childrenRender: (children, props) => {
       // if (initialState?.loading) return <PageLoading />;

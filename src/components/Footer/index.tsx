@@ -10,19 +10,7 @@ const Footer: React.FC = () => {
 
   const currentYear = new Date().getFullYear();
 
-  return (
-    <DefaultFooter
-      copyright={`${currentYear} ${defaultMessage}`}
-      links={[
-        {
-          key: 'Ant Design Pro',
-          title: 'Ant Digimon',
-          href: 'https://pro.ant.design',
-          blankTarget: true,
-        },
-      ]}
-    />
-  );
+  return <DefaultFooter copyright={`${currentYear} ${defaultMessage}`} />;
 };
 
 export default Footer;

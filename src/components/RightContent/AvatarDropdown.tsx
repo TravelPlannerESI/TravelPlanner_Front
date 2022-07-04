@@ -1,4 +1,5 @@
 import { outLogin } from '@/services/ant-design-pro/api';
+import { COOKIE_NAME, deleteCookie } from '@/util/cookie';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import type { ItemType } from 'antd/lib/menu/hooks/useItems';
@@ -13,22 +14,15 @@ export type GlobalHeaderRightProps = {
   menu?: boolean;
 };
 
-/**
- * 退出登录，并且将当前的 url 保存
- */
 const loginOut = async () => {
-  await outLogin();
-  const { query = {}, search, pathname } = history.location;
+  const { query = {} } = history.location;
   const { redirect } = query;
-  // Note: There may be security issues, please note
-  if (window.location.pathname !== '/user/login' && !redirect) {
-    history.replace({
-      pathname: '/user/login',
-      search: stringify({
-        redirect: pathname + search,
-      }),
-    });
-  }
+
+  deleteCookie(COOKIE_NAME);
+
+  history.replace({
+    pathname: '/nologin/maps',
+  });
 };
 
 const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
