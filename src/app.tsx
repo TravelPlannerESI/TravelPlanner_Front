@@ -19,7 +19,7 @@ export const initialStateConfig = {
 /**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
-export async function getInitialState(): Promise<{
+export async function getInitialState(gubun?: boolean): Promise<{
   settings?: Partial<LayoutSettings>;
   currentUser?: API.CurrentUser;
   loading?: boolean;
@@ -68,11 +68,13 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
       content: initialState?.currentUser?.name,
     },
     footerRender: () => <Footer />,
-    onPageChange: () => {
+    onPageChange: async () => {
       const { location } = history;
 
       if (!initialState?.currentUser && location.pathname !== loginPath) {
-        history.push(loginPath);
+        const userInfo: any = await initialState?.fetchUserInfo?.();
+        console.log('userInfo', userInfo);
+        setInitialState((s) => ({ ...s, currentUser: userInfo }));
       }
     },
     menuHeaderRender: undefined,

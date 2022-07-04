@@ -1,10 +1,9 @@
 import { LoadingOutlined } from '@ant-design/icons';
-import { Button, Space } from 'antd';
-import React, { useState } from 'react';
+import { Space } from 'antd';
+import React from 'react';
 import { useModel } from 'umi';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
-import LoginModal from './LoginModal';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -21,6 +20,8 @@ const GlobalHeaderRight: React.FC = () => {
   if ((navTheme === 'dark' && layout === 'top') || layout === 'mix') {
     className = `${styles.right}  ${styles.dark}`;
   }
+
+  console.log('initialState?.currentUser', initialState?.currentUser);
 
   return (
     <Space className={className}>
