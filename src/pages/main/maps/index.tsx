@@ -5,6 +5,7 @@ import { useModel, history } from 'umi';
 import styles from './index.less';
 import caxios from '@/util/caxios';
 import GlobalHeaderRight from '@/components/RightContent';
+import GoogleMaps from '../googlemaps';
 
 const Maps: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -35,6 +36,7 @@ const Maps: React.FC = () => {
         >
           페이지 이동
         </Button>
+        <GoogleMaps />
       </div>
       <Footer />
     </div>

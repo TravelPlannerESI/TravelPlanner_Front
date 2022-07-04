@@ -58,7 +58,7 @@ const GoogleMaps = () => {
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(userLocation);
-    // caxios.get(`/api/v1/country`).then((res) => console.log(res));
+    caxios.get(`/api/v1/country`).then((res) => console.log(res));
     // request('/api/v1/map').then((res) => console.log(res));
   }, []);
 
