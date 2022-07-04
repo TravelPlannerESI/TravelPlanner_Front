@@ -5,6 +5,8 @@ import { useModel, history } from 'umi';
 import LoginModal from '../loginModal';
 import styles from './index.less';
 import caxios from '@/util/caxios';
+import GMap from '@/components/GoogleMap/GMap';
+import GoogleMaps from '../googlemaps';
 
 const Maps: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
@@ -33,6 +35,7 @@ const Maps: React.FC = () => {
       </div>
       <div className={styles.content}>
         <LoginModal visible={visible} setVisible={setVisible} />
+        <GoogleMaps />
       </div>
       <Footer />
     </div>
