@@ -6,10 +6,11 @@ import styles from './index.less';
 import caxios from '@/util/caxios';
 import GlobalHeaderRight from '@/components/RightContent';
 import GoogleMaps from '../googlemaps';
-
+import TravelFormModal from '@/components/TravelFormModal';
+import RightSider from '@/components/RightSider';
 const Maps: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
-
+  const [visible, setVisible] = useState<boolean>(false);
   const { REACT_APP_ENV } = process.env;
 
   return (
@@ -36,6 +37,11 @@ const Maps: React.FC = () => {
         >
           페이지 이동
         </Button>
+        <Button type="primary" onClick={() => setVisible(true)}>
+          일정추가
+        </Button>
+        <RightSider />
+        <TravelFormModal visible={visible} setVisible={setVisible}></TravelFormModal>
         <GoogleMaps />
       </div>
       <Footer />
