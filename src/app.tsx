@@ -26,10 +26,9 @@ export async function getInitialState(gubun?: boolean): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
-    const { data: resData }: any = await caxios.post('/oauth/success').catch(() => {
-      history.push('/nologin/maps');
-    });
+    const { data: resData }: any = await caxios.post('/oauth/success');
 
+    console.log(resData);
     const returnData: any = {
       name: resData.name,
       avatar: resData.picture,
