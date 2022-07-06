@@ -1,4 +1,4 @@
-import CountryInfo from '@/components/GoogleMap/countryInfo';
+import CountryInfo from '@/components/GoogleMap/travelInfoBox';
 
 const CountryInfoArea = (loc: any) => {
   return (

@@ -28,7 +28,7 @@ const CountryInfo = ({ alarmLvl, level }: any) => {
         backgroundColor: setBgColor(),
         cursor: 'pointer',
       }}
-      onMouseOver={() => console.log('기능추가?')}
+      // onMouseOver={() => console.log('기능추가?')}
     >
       <p style={{ fontSize: '20px', color: 'white' }}>{setData()}</p>
     </div>
