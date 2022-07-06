@@ -1,7 +1,7 @@
 import { StandaloneSearchBox } from '@react-google-maps/api';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
-const SearchBox = ({ setLocMarker }: any) => {
+const SearchBox = ({ locMarker, setLocMarker }: any) => {
   const [searchBox, setSearchBox] = useState<any>(null);
 
   const onLoad = (data: any) => {
@@ -10,15 +10,19 @@ const SearchBox = ({ setLocMarker }: any) => {
 
   // searchBox 검색을 통해 장소 data가 제공되면, 제일 첫번째 data의 위치로 map이동
   const onPlacesChanged = () => {
+    console.log(searchBox);
     if (searchBox !== null && searchBox?.getPlaces() !== undefined) {
-      setLocMarker({
-        location: {
-          lat: searchBox?.getPlaces()[0]?.geometry?.location?.lat(),
-          lng: searchBox?.getPlaces()[0]?.geometry?.location?.lng(),
+      setLocMarker([
+        ...locMarker,
+        {
+          location: {
+            lat: searchBox?.getPlaces()[0]?.geometry?.location?.lat(),
+            lng: searchBox?.getPlaces()[0]?.geometry?.location?.lng(),
+          },
+          zoom: 17, // zoom값은 숫자가 커질수록 더 가까이 보인다.
+          isSearched: true,
         },
-        zoom: 17, // zoom값은 숫자가 커질수록 더 가까이 보인다.
-        isSearched: true,
-      });
+      ]);
     }
   };
 

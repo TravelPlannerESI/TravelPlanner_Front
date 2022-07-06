@@ -1,68 +1,23 @@
 import { useEffect, useState } from 'react';
-import { GoogleMap, InfoWindow, MarkerF } from '@react-google-maps/api';
-import SearchBox from '@/components/GoogleMap/SearchBox';
-import GMap from '@/components/GoogleMap/GMap';
+import { GoogleMap, Marker } from '@react-google-maps/api';
+import SearchBox from '@/components/GoogleMap/searchBox';
+import GMap from '@/components/GoogleMap/gmap';
 import caxios from '@/util/caxios';
-
-const locations = [
-  {
-    name: 'Korea ',
-    location: {
-      lat: 37,
-      lng: 127,
-    },
-  },
-  {
-    name: 'Location 1 ',
-    location: {
-      lat: 29,
-      lng: 120.162,
-    },
-  },
-  {
-    name: 'Location 2 ',
-    location: {
-      lat: 41.3917,
-      lng: 42.1649,
-    },
-  },
-  {
-    name: 'Location 3',
-    location: {
-      lat: 41.3773,
-      lng: 12.1585,
-    },
-  },
-  {
-    name: 'Location 4',
-    location: {
-      lat: 47.3797,
-      lng: 2.1682,
-    },
-  },
-  {
-    name: 'Location 5',
-    location: {
-      lat: 37.4055,
-      lng: 2.1915,
-    },
-  },
-];
+import CountryInfoArea from './countryInfoArea';
+import CovidCountryInfo from '@/components/GoogleMap/covidCountryInfo';
 
 const GoogleMaps = () => {
-  const [selected, setSelected] = useState<any>({}); // marker를 선택하면 그 위치에 대한 정보를 담는다.
   const [currentPosition, setCurrentPosition] = useState<any>({}); // marker를 드래그해서 마지막에 놓은 위치의 정보를 담는다.
   const [locMarker, setLocMarker] = useState<MapAPI.LockMarker>(); // 검색한 위치의 marker를 표시한다.
-
-  // const [locations, setLocations] = useState<any>();
+  const [locations, setLocations] = useState<any>([]);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(userLocation);
-    // caxios.get(`/api/v1/country`).then((res) => console.log(res));
-    // request('/api/v1/map').then((res) => console.log(res));
+    getInitialData();
   }, []);
 
-  const userLocation = ({ coords, timestamp }: any) => {
+  // 최초 로딩시 사용자의 위치정보를 가져온다.
+  const userLocation = ({ coords }: any) => {
     setLocMarker({
       location: {
         lat: coords?.latitude,
@@ -73,11 +28,30 @@ const GoogleMaps = () => {
     });
   };
 
-  const onSelect = (val: any) => {
-    console.log('onselect', val);
-    setSelected(val);
+  // 최초 로딩시 모든 국가의 코로나 및 좌표를 조회한다.
+  const getInitialData = () => {
+    caxios.get(`/country`).then((res) => {
+      const response = res.data.data;
+      setLocations(setDataType(response));
+    });
   };
 
+  const setDataType = (res: any) => {
+    return res.map((data: any) => {
+      let newObj = {};
+      newObj['alarmLvl'] = data.alarmLvl;
+      newObj['countryEngNm'] = data.countryEngNm;
+      newObj['countryIsoAlp2'] = data.countryIsoAlp2;
+      newObj['countryNm'] = data.countryNm;
+      newObj['lat'] = parseFloat(data.lat);
+      newObj['lng'] = parseFloat(data.lng);
+      newObj['title'] = data.title;
+      newObj['txtOriginCn'] = data.txtOriginCn;
+      return newObj;
+    });
+  };
+
+  // Marker를 드래그하고 내려놓은 곳의 정보를 가져온다.
   const onMarkerDragEnd = (e: any) => {
     console.log(e);
     const lat = e.latLng.lat();
@@ -85,46 +59,28 @@ const GoogleMaps = () => {
     setCurrentPosition({ lat, lng });
   };
 
+  const parseFloat = (val: string) => {
+    return Number.parseFloat(val);
+  };
+
   return (
     <div>
       <GMap>
         <GoogleMap
-          mapContainerStyle={{ height: '100vh', width: '100%' }}
+          mapContainerStyle={{ height: '85vh', width: '100%' }}
           zoom={locMarker?.zoom}
           center={locMarker?.location}
         >
+          {/* 검색창 */}
           <SearchBox setLocMarker={setLocMarker} />
 
-          {/* 사용자의 여행 계획에 담긴 위치를 표시한다. */}
-          {locations?.map((val, index) => {
-            return (
-              <MarkerF
-                key={index}
-                position={val.location}
-                clickable={true}
-                onClick={() => onSelect(val)}
-                onDragEnd={(e) => onMarkerDragEnd(e)}
-                draggable={true}
-                visible={true}
-                zIndex={1}
-              />
-            );
-          })}
+          {/* 지도에 코로나 단계별로 마커를 표시해준다. */}
+          <CovidCountryInfo locations={locations} />
 
           {/* 검색한 위치가 있을 시 표시한다. */}
-          {locMarker && locMarker.isSearched && <MarkerF position={locMarker.location} />}
+          {locMarker && locMarker.isSearched && <Marker position={locMarker.location} />}
 
-          {
-            // 툴팁
-            selected?.location && (
-              <InfoWindow
-                position={{ lat: selected?.location?.lat, lng: selected?.location?.lng }}
-                onCloseClick={() => onSelect(null)}
-              >
-                <p>{selected.name}</p>
-              </InfoWindow>
-            )
-          }
+          <CountryInfoArea loc={locations} />
         </GoogleMap>
       </GMap>
     </div>
