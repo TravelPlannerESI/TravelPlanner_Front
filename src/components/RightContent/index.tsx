@@ -1,7 +1,7 @@
-import { LoadingOutlined } from '@ant-design/icons';
-import { Space } from 'antd';
+import { LoadingOutlined, SettingOutlined } from '@ant-design/icons';
+import { Button, Space } from 'antd';
 import React from 'react';
-import { useModel } from 'umi';
+import { history, useModel } from 'umi';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
 
@@ -25,7 +25,22 @@ const GlobalHeaderRight: React.FC = () => {
 
   return (
     <Space className={className}>
-      {initialState?.currentUser ? <Avatar /> : <LoadingOutlined />}
+      {initialState?.currentUser ? (
+        <>
+          {' '}
+          <Button
+            shape="circle"
+            type="primary"
+            icon={<SettingOutlined />}
+            onClick={() => {
+              history.push('/search/day');
+            }}
+          />
+          <Avatar />
+        </>
+      ) : (
+        <LoadingOutlined />
+      )}
     </Space>
   );
 };
