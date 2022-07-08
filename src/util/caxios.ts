@@ -13,7 +13,7 @@ caxios.defaults.withCredentials = true;
 caxios.defaults.headers.common['Content-Type'] = 'application/json';
 caxios.interceptors.request.use((error) => {
   console.log('request');
-  history.push('/nologin/maps');
+  // history.push('/nologin/maps');
 });
 
 caxios.interceptors.response.use((error) => {

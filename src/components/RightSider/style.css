@@ -1,0 +1,79 @@
+.RightSiderbutton {
+  position: absolute;
+  top: 112px;
+  right: 20px;
+  z-index: 999;
+  width: 86px;
+  height: 40px;
+  background-color: #f9cb11;
+  border: none;
+  border-radius: 6px;
+  outline: 0;
+  box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* .RightSiderbutton:hover {
+  opacity: 0.8;
+  transition: all 0.25s ease;
+} */
+
+.rightSiderMenu {
+  position: absolute;
+  width: 250px;
+  height: 85%;
+  background: #f7faf2;
+  /* transform: translateX(-1%); */
+  visibility: hidden;
+  opacity: 0;
+  /* transition: all 0.25s ease; */
+}
+
+.rightSiderMenu a {
+  /* display: block; */
+  padding: 20px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.rightSiderMenu a ul {
+  margin: 0;
+  padding: 0;
+}
+
+.rightSiderMenu a ul li {
+  font-size: 16px;
+  border-bottom: 1px solid #fff;
+  opacity: 0;
+  transition: all 0.25s ease;
+  animation: fadeInRight 0.25s ease forwards;
+}
+
+.rightSiderMenu a ul li:hover {
+  background: #000;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: all 0.25s ease;
+}
+
+.active {
+  right: 17px;
+  z-index: 100;
+  float: right;
+  /* transform: translateX(0); */
+  visibility: visible;
+  opacity: 1;
+  /* transition: all 0.25s ease; */
+}
+
+@-webkit-keyframes fadeInRight {
+  0% {
+    right: 20%;
+    opacity: 0;
+  }
+  100% {
+    right: 0;
+    opacity: 1;
+  }
+}

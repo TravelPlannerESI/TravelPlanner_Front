@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { Button, Form, Input, DatePicker, Select } from 'antd';
 import { request } from 'umi';
 const { Option } = Select;
+import caxios from '@/util/caxios';
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 15 },
@@ -62,7 +63,17 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
     { value: 'KO', title: '한국' },
     { value: 'JP', title: '일본' },
   ];
+  const [total, setTotal] = useState<any>({});
 
+  const handleKeyPress = (e) => {
+    console.log(e.code);
+    if (e.code === 'Enter')
+      caxios.get(`/users/${total.sendEmail}`).then((res) => {
+        console.log(res);
+        // const response = res.data.data;
+        // setLocations(setDataType(response));
+      });
+  };
   return (
     <>
       <Modal
@@ -112,6 +123,30 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
                   {o.title}
                 </Option>
               ))}
+            </Select>
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            name="member"
+            label="국가"
+            rules={[{ required: true, message: 'Please select your country!' }]}
+          >
+            <Select
+              mode="multiple"
+              style={{ width: '100%' }}
+              placeholder="select one country"
+              onKeyDown={(e) => handleKeyPress(e)}
+              onSearch={(e) => setTotal({ sendEmail: e })}
+              optionLabelProp="label"
+            >
+              {/* <Option value="china" label="China">
+                <div className="demo-option-label-item">
+                  <span role="img" aria-label="China">
+                    🇨🇳
+                  </span>
+                  China (中国)
+                </div>
+              </Option> */}
             </Select>
           </Form.Item>
           <Form.Item {...formTailLayout}>

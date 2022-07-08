@@ -1,40 +1,52 @@
 import { useState } from 'react';
-import styles from './style.less';
+import './style.css';
+import TravelFormModal from '@/components/TravelFormModal';
+import { Button } from 'antd';
+const navLinks = [
+  { url: '/about-us', name: 'About Us' },
+  { url: '/projects', name: 'Projects' },
+  { url: '/services', name: 'Services' },
+  { url: '/contact-us', name: 'Contact Us' },
+];
 
 const RightSider = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState({
+    style: 'rightSiderMenu active',
+    menuStatus: 'close',
+    menuName: '닫기',
+  });
 
+  const handleClick = () => {
+    switch (isOpen.menuStatus) {
+      case 'open':
+        setIsOpen({
+          menuName: '닫기',
+          menuStatus: 'close',
+          style: 'rightSiderMenu active',
+        });
+        break;
+      case 'close':
+        setIsOpen({
+          menuStatus: 'open',
+          style: 'rightSiderMenu',
+          menuName: '열기',
+        });
+        break;
+    }
+  };
+  const [visible, setVisible] = useState<boolean>(false);
   return (
-    <div className={`${styles.sidebarMenu}${isMenuOpen === true ? ' open' : ''}`}>
-      <button
-        type="button"
-        className="button small float-right"
-        onClick={() => {
-          setIsMenuOpen(!isMenuOpen);
-          console.log(isMenuOpen);
-          console.log(`${styles.sidebarMenu}${isMenuOpen === true ? ' open' : ''}`);
-        }}
-      >
-        Toggle Menu
+    <>
+      <button className="RightSiderbutton" onClick={() => handleClick()}>
+        {isOpen.menuName}
       </button>
-      <ul className="vertical menu">
-        <li>
-          <a>Menu Item</a>
-        </li>
-        <li>
-          <a>Menu Item</a>
-        </li>
-        <li>
-          <a>Menu Item</a>
-        </li>
-        <li>
-          <a>Menu Item</a>
-        </li>
-        <li>
-          <a>Menu Item</a>
-        </li>
-      </ul>
-    </div>
+      <div className={isOpen.style}>
+        <Button type="primary" onClick={() => setVisible(true)}>
+          일정추가
+        </Button>
+        <TravelFormModal visible={visible} setVisible={setVisible}></TravelFormModal>
+      </div>
+    </>
   );
 };
 
