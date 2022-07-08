@@ -5,7 +5,6 @@ import { useModel, history } from 'umi';
 import LoginModal from '../loginModal';
 import styles from './index.less';
 import caxios from '@/util/caxios';
-import GMap from '@/components/GoogleMap/gmap';
 import GoogleMaps from '../googlemaps';
 
 const Maps: React.FC = () => {
