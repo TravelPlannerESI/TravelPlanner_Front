@@ -63,16 +63,17 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
     { value: 'KO', title: '한국' },
     { value: 'JP', title: '일본' },
   ];
-  const [total, setTotal] = useState<any>({});
+  const [total, setTotal] = useState({
+    userEmails: [],
+    sendEmail: '',
+  });
 
   const handleKeyPress = (e) => {
-    console.log(e.code);
-    if (e.code === 'Enter')
+    if (e.code === 'Enter') {
       caxios.get(`/users/${total.sendEmail}`).then((res) => {
-        console.log(res);
-        // const response = res.data.data;
-        // setLocations(setDataType(response));
+        setTotal({ userEmails: res.data, sendEmail: '' });
       });
+    }
   };
   return (
     <>
@@ -128,7 +129,7 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
           <Form.Item
             {...formItemLayout}
             name="member"
-            label="국가"
+            label="멤버"
             rules={[{ required: true, message: 'Please select your country!' }]}
           >
             <Select
@@ -139,14 +140,11 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
               onSearch={(e) => setTotal({ sendEmail: e })}
               optionLabelProp="label"
             >
-              {/* <Option value="china" label="China">
-                <div className="demo-option-label-item">
-                  <span role="img" aria-label="China">
-                    🇨🇳
-                  </span>
-                  China (中国)
-                </div>
-              </Option> */}
+              {total?.userEmails?.map((elme, idx) => (
+                <Option value={elme} label={elme} key={idx}>
+                  <div className="demo-option-label-item">{elme}</div>
+                </Option>
+              ))}
             </Select>
           </Form.Item>
           <Form.Item {...formTailLayout}>

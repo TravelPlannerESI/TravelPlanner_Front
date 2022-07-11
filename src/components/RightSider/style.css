@@ -1,7 +1,7 @@
 .RightSiderbutton {
   position: absolute;
   top: 112px;
-  right: 20px;
+  right: 2px;
   z-index: 999;
   width: 86px;
   height: 40px;
@@ -58,7 +58,7 @@
 }
 
 .active {
-  right: 17px;
+  right: 2px;
   z-index: 100;
   float: right;
   /* transform: translateX(0); */

@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import SearchBox from '@/components/GoogleMap/searchBox';
 import GMap from '@/components/GoogleMap/gmap';
 import caxios from '@/util/caxios';
 import CountryInfoArea from './countryInfoArea';
@@ -99,29 +98,29 @@ const GoogleMaps = () => {
   };
 
   return (
-    <div>
-      <GMap>
-        <GoogleMap
-          mapContainerStyle={{ height: '85vh', width: '100%' }}
-          zoom={locMarker !== undefined ? locMarker[locMarker.length - 1].zoom : 4}
-          center={
-            locMarker !== undefined ? locMarker[locMarker.length - 1].location : defaultCenter
-          }
-        >
-          <SearchBox locMarker={locMarker} setLocMarker={setLocMarker} />
+    <GMap>
+      <GoogleMap
+        mapContainerStyle={{ height: '100%', width: '100%' }}
+        zoom={locMarker !== undefined ? locMarker[locMarker.length - 1].zoom : 4}
+        center={
+          locMarker !== undefined
+            ? locMarker[locMarker.length - 1].location
+            : defaultCenter /* 수정 필요 */
+        }
+      >
+        {/* <SearchBox locMarker={locMarker} setLocMarker={setLocMarker} /> */}
 
-          {/* 지도에 코로나 단계별로 마커를 표시해준다. */}
-          <CovidCountryInfo locations={locations} />
+        {/* 지도에 코로나 단계별로 마커를 표시해준다. */}
+        <CovidCountryInfo locations={locations} />
 
-          {/* 검색후 나타난 결과를 지도에 표시 및 저장된 여행지의 정보 */}
-          {locMarker?.map((val: any, index: number) => {
-            return <Marker key={index} position={val.location} icon={setMarkerTypeIcon(val)} />;
-          })}
+        {/* 검색후 나타난 결과를 지도에 표시 및 저장된 여행지의 정보 */}
+        {locMarker?.map((val: any, index: number) => {
+          return <Marker key={index} position={val.location} icon={setMarkerTypeIcon(val)} />;
+        })}
 
-          <CountryInfoArea loc={locations} />
-        </GoogleMap>
-      </GMap>
-    </div>
+        <CountryInfoArea loc={locations} />
+      </GoogleMap>
+    </GMap>
   );
 };
 
