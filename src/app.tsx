@@ -8,7 +8,6 @@ import defaultSettings from '../config/defaultSettings';
 import initialState from './.umi/plugin-initial-state/models/initialState';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import caxios from './util/caxios';
-import { COOKIE_NAME, getCookie } from './util/cookie';
 
 const loginPath = '/nologin/maps';
 
@@ -80,7 +79,6 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
 
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         const userInfo: any = await initialState?.fetchUserInfo?.();
-        console.log('userInfo', userInfo);
         setInitialState((s) => ({ ...s, currentUser: userInfo }));
       }
     },
