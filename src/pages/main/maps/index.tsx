@@ -2,11 +2,12 @@ import Footer from '@/components/Footer';
 import React from 'react';
 import { useModel } from 'umi';
 import styles from './index.less';
-
 import GlobalHeaderRight from '@/components/RightContent';
 import GoogleMaps from '../googlemaps';
 import TravelFormModal from '@/components/TravelFormModal';
 import RightSider from '@/components/RightSider';
+import { useState } from 'react';
+
 const Maps: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const [visible, setVisible] = useState<boolean>(false);
@@ -36,6 +37,7 @@ const Maps: React.FC = () => {
         </div>
       </div>
       <div className={styles.content}>
+        <RightSider />
         <GoogleMaps />
       </div>
       <Footer />

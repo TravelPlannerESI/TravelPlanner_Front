@@ -1,10 +1,10 @@
 .RightSiderbutton {
   position: absolute;
-  top: 112px;
+  top: 48px;
   right: 2px;
   z-index: 999;
-  width: 86px;
-  height: 40px;
+  width: 100px;
+  height: 50px;
   background-color: #f9cb11;
   border: none;
   border-radius: 6px;
