@@ -1,4 +1,5 @@
 import { outLogin } from '@/services/ant-design-pro/api';
+import caxios from '@/util/caxios';
 import { COOKIE_NAME, deleteCookie } from '@/util/cookie';
 import { LogoutOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
@@ -33,6 +34,7 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
       const { key } = event;
       if (key === 'logout') {
         setInitialState((s) => ({ ...s, currentUser: undefined }));
+        caxios.post(`/logout`);
         loginOut();
         return;
       }

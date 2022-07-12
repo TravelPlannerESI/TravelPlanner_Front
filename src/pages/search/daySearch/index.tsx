@@ -1,7 +1,8 @@
+import Container from './container';
 import * as React from 'react';
 
 const DaySearch = () => {
-  return <div>날짜별 조회</div>;
+  return <Container />;
 };
 
 export default DaySearch;
