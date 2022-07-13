@@ -1,5 +1,6 @@
 import type { Axios } from 'axios';
 import axios from 'axios';
+import { history } from 'umi';
 import apiServer from '../../config/apiServer';
 
 const { NODE_ENV } = process.env;
@@ -15,8 +16,13 @@ caxios.defaults.headers.common['Content-Type'] = 'application/json';
 //   console.log(error);
 // });
 
-// caxios.interceptors.response.use((error) => {
-//   console.log('response');
-//   console.log(error);
-// });
+caxios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response.status === 401) {
+      history.push('/nologin/maps');
+    }
+  },
+);
+
 export default caxios;
