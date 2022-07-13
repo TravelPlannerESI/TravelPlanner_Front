@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './style.css';
 import TravelFormModal from '@/components/TravelFormModal';
-import { Button } from 'antd';
+import { Button, Card } from 'antd';
+import caxios from '@/util/caxios';
 const navLinks = [
   { url: '/about-us', name: 'About Us' },
   { url: '/projects', name: 'Projects' },
@@ -15,6 +16,25 @@ const RightSider = () => {
     menuStatus: 'close',
     menuName: '닫기',
   });
+
+  const [initialState, setInitialState] = useState<any>([]);
+
+  const setDataType = (res: any) => {
+    return res.map((data: any) => {
+      let newObj = {};
+      Object.keys(data).forEach((key) => {
+        newObj[key] = data[key];
+      });
+      console.log('newObj ', newObj);
+      return newObj;
+    });
+  };
+
+  useEffect(() => {
+    caxios.get(`/travel`).then((res) => {
+      setInitialState(setDataType(res.data));
+    });
+  }, []);
 
   const handleClick = () => {
     switch (isOpen.menuStatus) {
@@ -45,6 +65,13 @@ const RightSider = () => {
           일정추가
         </Button>
         <TravelFormModal visible={visible} setVisible={setVisible}></TravelFormModal>
+        {initialState.map((m) => (
+          <Card style={{ width: 300 }}>
+            <p>{m.travelName}</p>
+            <p>{m.startDate}</p>
+            <p>{m.endDate}</p>
+          </Card>
+        ))}
       </div>
     </>
   );

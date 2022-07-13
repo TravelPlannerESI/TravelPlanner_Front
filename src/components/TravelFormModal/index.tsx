@@ -1,6 +1,6 @@
 import { Modal } from 'antd';
 import { useEffect, useState } from 'react';
-import { Button, Form, Input, DatePicker, Select } from 'antd';
+import { Button, Form, Input, DatePicker, Select, InputNumber } from 'antd';
 import { request } from 'umi';
 const { Option } = Select;
 import caxios from '@/util/caxios';
@@ -60,8 +60,8 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
   };
 
   const options = [
-    { value: 'KO', title: '한국' },
-    { value: 'JP', title: '일본' },
+    { value: '한국', title: '한국' },
+    { value: '일본', title: '일본' },
   ];
   const [total, setTotal] = useState({
     userEmails: [],
@@ -69,11 +69,12 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
   });
 
   const handleKeyPress = (e) => {
-    if (e.code === 'Enter') {
-      caxios.get(`/users/${total.sendEmail}`).then((res) => {
-        setTotal({ userEmails: res.data, sendEmail: '' });
-      });
-    }
+    if (!!total.sendEmail)
+      if (e.code === 'Enter') {
+        caxios.get(`/users/${total.sendEmail}`).then((res) => {
+          setTotal({ userEmails: res.data, sendEmail: '' });
+        });
+      }
   };
   return (
     <>
@@ -128,7 +129,15 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
           </Form.Item>
           <Form.Item
             {...formItemLayout}
-            name="member"
+            name="totalCost"
+            label="총 비용"
+            rules={[{ required: true, message: '비용을 입력해주세요.' }]}
+          >
+            <InputNumber min={1} placeholder="총 비용" />
+          </Form.Item>
+          <Form.Item
+            {...formItemLayout}
+            name="membersEmail"
             label="멤버"
             rules={[{ required: true, message: 'Please select your country!' }]}
           >
