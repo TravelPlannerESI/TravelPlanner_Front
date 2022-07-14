@@ -10,7 +10,7 @@ const GMap: React.FC = ({ children }) => {
 
   return (
     <div style={{ height: '100%' }}>
-      <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={gMapLibraries}>
+      <LoadScript googleMapsApiKey={GOOGLE_MAPS_API_KEY} libraries={gMapLibraries} language={'ko'}>
         {children}
       </LoadScript>
     </div>
