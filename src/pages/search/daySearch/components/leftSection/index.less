@@ -2,9 +2,60 @@
   flex: 1;
   max-width: 14.3%;
   padding: 3px;
-  background-color: white;
+  overflow-y: scroll;
+  background-color: #dcdcde;
   border: 1px solid #dadce0;
   border-radius: 10px;
   box-shadow: 0 5px 5px -3px rgb(0 0 0 / 16%), 0 8px 10px 1px rgb(0 0 0 / 11%),
     0 3px 14px 2px rgb(0 0 0 / 10%);
+}
+
+.searchLeftSection::-webkit-scrollbar {
+  display: none;
+  width: 0 !important;
+}
+
+.test2 {
+  transition-property: all;
+}
+
+.planDetailContainer {
+  width: 100%;
+  height: 90px;
+  margin-bottom: 8px;
+  padding: 7px;
+  background-color: white;
+  border: 1px solid #c3c4c7;
+  cursor: pointer;
+}
+
+.planDetailContainer:hover {
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+.planDetailTitle {
+  width: 100%;
+  height: 25px;
+  overflow: hidden;
+  font-weight: 700;
+  font-size: 15px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.planDetailAddress {
+  width: 100%;
+  height: 23px;
+  font-size: 12px;
+}
+
+.planTypeNSetting {
+  display: flex;
+  width: 100%;
+}
+
+.displaySelectedDate {
+  margin: 12px 0 -10px 0;
+  font-size: 30px;
+  text-align: center;
 }

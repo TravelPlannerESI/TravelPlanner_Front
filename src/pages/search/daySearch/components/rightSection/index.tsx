@@ -3,8 +3,12 @@ import { Button, Tag } from 'antd';
 import React, { useState } from 'react';
 import styles from './index.less';
 
-const RightSection = () => {
+const RightSection = ({ plans, setPlans }: any) => {
   const [hasPrevious, setHasPrevious] = useState<boolean>(false);
+
+  // 두번째 depth를 열 때, 데이터를 가져가기 위한 useState
+  // handleSetting() 에서 핸들링   ||  찾아가려면   →   console.log(planDetail)   ←   복붙
+  const [planDetail, setPlanDetail] = useState<any>();
 
   const ButtonLayout = () => {
     return hasPrevious ? (
@@ -31,8 +35,9 @@ const RightSection = () => {
     );
   };
 
-  const handleSetting = () => {
+  const handleSetting = (detail: any) => {
     setHasPrevious(true);
+    setPlanDetail(detail);
   };
 
   const mock: any = [
@@ -53,14 +58,22 @@ const RightSection = () => {
     },
   ];
 
-  const PlanDetail = ({ plan }: any) => {
+  const PlanDetail = ({ planKey, data }: any) => {
+    console.log('위치정보 객체는 여기를 확인하면 됩니다.');
+    console.log(data);
+
     return (
       <div className={styles.planDetailContainer}>
-        <div className={styles.planDetailTitle}>{plan?.title}</div>
-        <div className={styles.planDetailTime}>{plan?.time}</div>
+        <div className={styles.planDetailTitle}>{data?.name}</div>
+        <div className={styles.planDetailTime}>시간????</div>
         <div className={styles.planTypeNSetting}>
           <div style={{ flex: 3 }}>
-            <CTag title={plan?.type} />
+            <CTag title={'어떡하지'} />
+
+            {/* 태그로 쓸만 데이터가 있긴한데 배열에 여러개가 담겨있어서 잠시 주석 걸어놨습니다. */}
+            {/* {data?.types.map((tag: string) => {
+              return <CTag title={tag} />;
+            })} */}
           </div>
           <div style={{ flex: 2, textAlign: 'right' }}>
             <Button
@@ -68,7 +81,7 @@ const RightSection = () => {
               type="default"
               icon={<SettingOutlined />}
               onClick={() => {
-                handleSetting();
+                handleSetting(data);
               }}
             />
             <Button shape="circle" type="default" icon={<DragOutlined />} />
@@ -80,7 +93,8 @@ const RightSection = () => {
 
   const Content = () => {
     return hasPrevious ? (
-      <div className={styles.test1} style={{ flex: 1, height: 857 }}>
+      <div className={styles.test1} style={{ flex: 1, height: 790 }}>
+        {console.log(planDetail)}
         <div
           style={{
             margin: '15px 2px 15px 2px',
@@ -88,12 +102,20 @@ const RightSection = () => {
             borderRadius: '15px',
             height: '99%',
           }}
-        ></div>
+        >
+          <br />
+          {planDetail?.name}
+        </div>
       </div>
     ) : (
-      <div className={styles.test2} style={{ flex: 1, height: 857 }}>
-        {mock.map((data: any) => {
-          return <PlanDetail plan={data} />;
+      <div className={styles.test2} style={{ flex: 1, height: 810 }}>
+        {/* mock는 임시 데이터라서 주석 걸어놓고,    plans에 담겨있는 실제 데이터 뿌려놨습니다. */}
+        {/* {mock.map((data: any, index: number) => {
+          return <PlanDetail plan={data} key={index} />;
+        })} */}
+
+        {plans?.map(({ key, data }: any) => {
+          return <PlanDetail planKey={key} data={data} key={data?.place_id} />;
         })}
       </div>
     );
