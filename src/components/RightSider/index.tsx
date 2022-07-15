@@ -2,13 +2,10 @@ import { useState, useEffect } from 'react';
 import './style.css';
 import TravelFormModal from '@/components/TravelFormModal';
 import { Button, Card } from 'antd';
+import { DragOutlined, SettingOutlined } from '@ant-design/icons';
 import caxios from '@/util/caxios';
-const navLinks = [
-  { url: '/about-us', name: 'About Us' },
-  { url: '/projects', name: 'Projects' },
-  { url: '/services', name: 'Services' },
-  { url: '/contact-us', name: 'Contact Us' },
-];
+import styles from '../../pages/search/daySearch/components/rightSection/index.less';
+import { uniqueId } from 'lodash';
 
 const RightSider = () => {
   const [isOpen, setIsOpen] = useState({
@@ -25,7 +22,6 @@ const RightSider = () => {
       Object.keys(data).forEach((key) => {
         newObj[key] = data[key];
       });
-      console.log('newObj ', newObj);
       return newObj;
     });
   };
@@ -65,13 +61,25 @@ const RightSider = () => {
           일정추가
         </Button>
         <TravelFormModal visible={visible} setVisible={setVisible}></TravelFormModal>
-        {initialState.map((m) => (
-          <Card style={{ width: 300 }}>
-            <p>{m.travelName}</p>
-            <p>{m.startDate}</p>
-            <p>{m.endDate}</p>
-          </Card>
-        ))}
+        <div style={{ marginTop: 35 }}>
+          {initialState.map((m, idx) => (
+            <div className={styles.planDetailContainer} key={`${uniqueId}${idx}`}>
+              <div className={styles.planDetailTitle} key={`${uniqueId}${idx}`}>
+                {m.travelName}
+              </div>
+              <div className={styles.planDetailTime}>
+                <p>시작일 : {m.startDate}</p>
+                <p>종료일 : {m.endDate}</p>
+              </div>
+              <div className={styles.planTypeNSetting}>
+                <div style={{ flex: 3 }}></div>
+                <div style={{ flex: 2, textAlign: 'right' }}>
+                  <Button shape="circle" type="default" icon={<SettingOutlined />} />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );

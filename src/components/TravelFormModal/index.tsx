@@ -1,9 +1,11 @@
 import { Modal } from 'antd';
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, DatePicker, Select, InputNumber } from 'antd';
-import { request } from 'umi';
+import { request, useModel } from 'umi';
 const { Option } = Select;
 import caxios from '@/util/caxios';
+import ResultModal from '@/components/ResultModal';
+
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 15 },
@@ -21,14 +23,15 @@ const formTailLayout = {
 
 const TravelFormModal = ({ visible, setVisible }: any) => {
   const [form] = Form.useForm();
-
+  const { initialState, setInitialState } = useModel('@@initialState');
+  console.log('initialState ', initialState);
   const onCheck = async () => {
     try {
       const values = await form.validateFields();
+      let isSuccess = true;
       Object.keys(values).forEach((k) => {
         if (k.includes('Date')) values[k] = values[k].format('YYYY-MM-DD');
       });
-      console.log('Success:', values);
       request('/api/v1/travel', {
         method: 'post',
         data: values,
@@ -37,8 +40,10 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
           console.log(response);
         })
         .catch(function (error) {
+          isSuccess = false;
           console.log(error);
-        });
+        })
+        .finally(() => <ResultModal isSuccess={isSuccess} inviteCode="성공" />);
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
