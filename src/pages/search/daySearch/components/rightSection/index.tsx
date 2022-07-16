@@ -1,14 +1,16 @@
-import { ArrowLeftOutlined, DragOutlined, SettingOutlined } from '@ant-design/icons';
-import { Button, Tag } from 'antd';
+import { ArrowLeftOutlined, DragOutlined, SaveOutlined, SettingOutlined } from '@ant-design/icons';
+import { Button, Form, Input, InputNumber, Select, TimePicker } from 'antd';
 import React, { useState } from 'react';
 import styles from './index.less';
 
-const RightSection = ({ plans, setPlans }: any) => {
-  const [hasPrevious, setHasPrevious] = useState<boolean>(false);
-
-  // 두번째 depth를 열 때, 데이터를 가져가기 위한 useState
-  // handleSetting() 에서 핸들링   ||  찾아가려면   →   console.log(planDetail)   ←   복붙
-  const [planDetail, setPlanDetail] = useState<any>();
+const RightSection = ({
+  hasPrevious,
+  setHasPrevious,
+  planDetail,
+  setPlanDetail,
+  detailForm,
+}: any) => {
+  const [plans, setPlans] = useState<any>();
 
   const ButtonLayout = () => {
     return hasPrevious ? (
@@ -40,23 +42,15 @@ const RightSection = ({ plans, setPlans }: any) => {
     setPlanDetail(detail);
   };
 
-  const mock: any = [
-    {
-      title: '오사카성',
-      time: '11:10 ~ 12:00',
-      type: '관광',
-    },
-    {
-      title: '오사카 밥집',
-      time: '11:10 ~ 12:00',
-      type: '먹방',
-    },
-    {
-      title: '오사카 야경',
-      time: '11:10 ~ 12:00',
-      type: '야경',
-    },
-  ];
+  const handleSave = async () => {
+    await detailForm
+      .validateFields()
+      .then((values: any) => console.log('zz', values))
+      .catch((errorInfo: any) => console.log('zz', errorInfo));
+
+    detailForm.validateFields();
+    console.log('asd', detailForm.getFieldsValue());
+  };
 
   const PlanDetail = ({ planKey, data }: any) => {
     console.log('위치정보 객체는 여기를 확인하면 됩니다.');
@@ -91,6 +85,75 @@ const RightSection = ({ plans, setPlans }: any) => {
     );
   };
 
+  const DetailForm = () => {
+    return (
+      <div style={{ padding: 3 }}>
+        <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 30 }}>
+          여행 정보
+          <div style={{ float: 'right' }}>
+            <Button
+              onClick={() => {
+                handleSave();
+              }}
+              icon={<SaveOutlined />}
+            >
+              저장
+            </Button>
+          </div>
+        </div>
+        <Form
+          labelCol={{ span: 9 }}
+          name="control-hooks"
+          wrapperCol={{ span: 17 }}
+          layout="horizontal"
+          form={detailForm}
+        >
+          <Form.Item
+            label="여행지 명"
+            name="planNm"
+            rules={[{ required: true, message: '필수입력' }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item label="여행 테마" name="theme">
+            <Select>
+              <Select.Option value="tourism">관광</Select.Option>
+              <Select.Option value="food">먹방</Select.Option>
+              <Select.Option value="cafe">카페</Select.Option>
+              <Select.Option value="rest">휴식</Select.Option>
+              <Select.Option value="experience">체험</Select.Option>
+              <Select.Option value="extreme">익스트림</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="이동 수단" name="vehicle">
+            <Select>
+              <Select.Option value="walk">걸어서</Select.Option>
+              <Select.Option value="subway">지하철</Select.Option>
+              <Select.Option value="tram">트램</Select.Option>
+              <Select.Option value="bus">버스</Select.Option>
+              <Select.Option value="taxi">택시</Select.Option>
+              <Select.Option value="airbus">비행기</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="출발 시간" name="startTime">
+            <TimePicker />
+          </Form.Item>
+          <Form.Item label="도착 시간" name="endTime">
+            <TimePicker />
+          </Form.Item>
+          <Form.Item label="비용" name="cost">
+            <InputNumber
+              formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              style={{ width: '100%' }}
+            />
+          </Form.Item>
+          <Form.Item hidden={true} name="lat" />
+          <Form.Item hidden={true} name="lng" />
+        </Form>
+      </div>
+    );
+  };
+
   const Content = () => {
     return hasPrevious ? (
       <div className={styles.test1} style={{ flex: 1, height: 790 }}>
@@ -104,16 +167,11 @@ const RightSection = ({ plans, setPlans }: any) => {
           }}
         >
           <br />
-          {planDetail?.name}
+          <DetailForm />
         </div>
       </div>
     ) : (
       <div className={styles.test2} style={{ flex: 1, height: 810 }}>
-        {/* mock는 임시 데이터라서 주석 걸어놓고,    plans에 담겨있는 실제 데이터 뿌려놨습니다. */}
-        {/* {mock.map((data: any, index: number) => {
-          return <PlanDetail plan={data} key={index} />;
-        })} */}
-
         {plans?.map(({ key, data }: any) => {
           return <PlanDetail planKey={key} data={data} key={data?.place_id} />;
         })}

@@ -1,3 +1,4 @@
+import { Form } from 'antd';
 import React, { useEffect, useState } from 'react';
 import LeftSection from '../components/leftSection';
 import MiddleSection from '../components/middleSection';
@@ -7,6 +8,9 @@ import styles from './index.less';
 const Container = () => {
   const [locMarker, setLocMarker] = useState<any>(); // 지도에 marker를 찍기위한 좌표정보를 담는다.
   const [plans, setPlans] = useState<any>([]); // "일정 추가" 버튼 클릭시 배열에 추가
+  const [hasPrevious, setHasPrevious] = useState<boolean>(false);
+  const [planDetail, setPlanDetail] = useState<any>();
+  const [detailForm] = Form.useForm();
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(userLocation);
@@ -28,11 +32,17 @@ const Container = () => {
       <LeftSection
         locMarker={locMarker}
         setLocMarker={setLocMarker}
-        plans={plans}
-        setPlans={setPlans}
+        setHasPrevious={setHasPrevious}
+        detailForm={detailForm}
       />
       <MiddleSection locMarker={locMarker} />
-      <RightSection plans={plans} setPlans={setPlans} />
+      <RightSection
+        hasPrevious={hasPrevious}
+        setHasPrevious={setHasPrevious}
+        planDetail={planDetail}
+        setPlanDetail={setPlanDetail}
+        detailForm={detailForm}
+      />
     </div>
   );
 };

@@ -30,6 +30,7 @@ const GoogleMaps = () => {
   // 최초 로딩시 모든 국가의 코로나 및 좌표를 조회한다.
   const getInitialData = () => {
     caxios.get(`/country`).then((res) => {
+      console.log('res', res);
       const response = res.data.data;
       setLocations(setDataType(response));
     });

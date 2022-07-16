@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import React, { useState } from 'react';
 import styles from './index.less';
 
-const LeftSection = ({ locMarker, setLocMarker, plans, setPlans }: any) => {
+const LeftSection = ({ locMarker, setLocMarker, setHasPrevious, detailForm }: any) => {
   const [places, setPlaces] = useState<any>(); // 검색 결과 리스트를 담는다.
 
   // 리스트를 클릭하면 지도의 위치가 바뀐다.
@@ -18,9 +18,19 @@ const LeftSection = ({ locMarker, setLocMarker, plans, setPlans }: any) => {
     });
   };
 
+  const handleAddPlan = (data: any) => {
+    detailForm.setFieldsValue({
+      ...detailForm.getFieldsValue(),
+      planNm: data?.name,
+      lat: data.geometry.location.lat(),
+      lng: data.geometry.location.lng(),
+    });
+  };
+
   // 세부 일정을 추가한다.
   const addPlans = (data: any) => {
-    setPlans([...plans, { key: data?.place_id, data: data }]);
+    setHasPrevious(true);
+    handleAddPlan(data);
   };
 
   const PlanDetail = ({ data }: any) => {
