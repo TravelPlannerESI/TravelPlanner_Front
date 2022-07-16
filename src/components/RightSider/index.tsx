@@ -32,7 +32,8 @@ const RightSider = () => {
 
   useEffect(() => {
     caxios.get(`/travel`).then((res) => {
-      setInitialState(setDataType(res.data));
+      // console.log('res', res);
+      // setInitialState(setDataType(res.data));
     });
   }, []);
 
