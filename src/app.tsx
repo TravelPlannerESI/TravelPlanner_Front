@@ -20,6 +20,7 @@ export const initialStateConfig = {
  * */
 export async function getInitialState(gubun?: boolean): Promise<{
   settings?: Partial<LayoutSettings>;
+  currentTravel?: number;
   currentUser?: API.CurrentUser;
   loading?: boolean;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
