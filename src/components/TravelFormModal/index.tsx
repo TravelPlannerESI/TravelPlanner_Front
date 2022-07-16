@@ -1,9 +1,13 @@
 import { Modal } from 'antd';
 import { useEffect, useState } from 'react';
 import { Button, Form, Input, DatePicker, Select, InputNumber } from 'antd';
-import { request } from 'umi';
-const { Option } = Select;
+import { request, useModel } from 'umi';
 import caxios from '@/util/caxios';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import moment from 'moment';
+
+const { RangePicker } = DatePicker;
+const { Option } = Select;
 const formItemLayout = {
   labelCol: { span: 6 },
   wrapperCol: { span: 15 },
@@ -22,23 +26,51 @@ const formTailLayout = {
 const TravelFormModal = ({ visible, setVisible }: any) => {
   const [form] = Form.useForm();
 
+  const afterClose = () => {
+    form.resetFields();
+    setVisible(false);
+  };
+
+  const success = (inviteCode: any) => {
+    Modal.success({
+      content: (
+        <>
+          <Input readOnly={true} defaultValue={inviteCode} style={{ width: '60%' }} />
+          <CopyToClipboard text={inviteCode}>
+            <Button type="primary"> 복사 </Button>
+          </CopyToClipboard>
+        </>
+      ),
+      afterClose: () => afterClose(),
+    });
+  };
+
+  const fail = () => {
+    Modal.error({
+      title: 'This is an error message',
+      content: 'some messages...some messages...',
+    });
+  };
+
   const onCheck = async () => {
     try {
       const values = await form.validateFields();
-      Object.keys(values).forEach((k) => {
-        if (k.includes('Date')) values[k] = values[k].format('YYYY-MM-DD');
-      });
-      console.log('Success:', values);
+      const resultObj = { isSuccess: true, inviteCode: '' };
+      values['startDate'] = values['rangeDate'][0].format('YYYY-MM-DD');
+      values['endDate'] = values['rangeDate'][1].format('YYYY-MM-DD');
+      delete values.rangeDate;
       request('/api/v1/travel', {
         method: 'post',
         data: values,
       })
         .then(function (response) {
-          console.log(response);
+          resultObj.inviteCode = response.inviteCode;
         })
         .catch(function (error) {
+          resultObj.isSuccess = false;
           console.log(error);
-        });
+        })
+        .finally(() => (resultObj.isSuccess ? success(resultObj.inviteCode) : fail()));
     } catch (errorInfo) {
       console.log('Failed:', errorInfo);
     }
@@ -76,6 +108,14 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
         });
       }
   };
+
+  const rangeConfig = {
+    rules: [{ type: 'array' as const, required: true, message: 'Please select time!' }],
+  };
+
+  const disabledDate: RangePickerProps['disabledDate'] = (current) => {
+    return current && current <= moment().add(-1, 'days').endOf('day');
+  };
   return (
     <>
       <Modal
@@ -83,7 +123,10 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
         title="일정추가"
         footer={[]}
         width={500}
-        onCancel={() => setVisible(false)}
+        onCancel={() => {
+          form.resetFields();
+          setVisible(false);
+        }}
       >
         <Form form={form} name="dynamic_rule">
           <Form.Item
@@ -94,11 +137,8 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
           >
             <Input placeholder="Please input your name" />
           </Form.Item>
-          <Form.Item {...formItemLayout} name="startDate" label="시작일" rules={ruleConfig['date']}>
-            <DatePicker />
-          </Form.Item>
-          <Form.Item {...formItemLayout} name="endDate" label="종료일" rules={ruleConfig['date']}>
-            <DatePicker />
+          <Form.Item {...formItemLayout} name="rangeDate" label="여행기간" {...rangeConfig}>
+            <RangePicker disabledDate={disabledDate} />
           </Form.Item>
           <Form.Item
             {...formItemLayout}

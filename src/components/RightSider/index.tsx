@@ -2,13 +2,10 @@ import { useState, useEffect } from 'react';
 import './style.css';
 import TravelFormModal from '@/components/TravelFormModal';
 import { Button, Card } from 'antd';
+import { history, useModel } from 'umi';
+import styles from './index.less';
+import { DragOutlined, SettingOutlined } from '@ant-design/icons';
 import caxios from '@/util/caxios';
-const navLinks = [
-  { url: '/about-us', name: 'About Us' },
-  { url: '/projects', name: 'Projects' },
-  { url: '/services', name: 'Services' },
-  { url: '/contact-us', name: 'Contact Us' },
-];
 
 const RightSider = () => {
   const [isOpen, setIsOpen] = useState({
@@ -17,7 +14,9 @@ const RightSider = () => {
     menuName: '닫기',
   });
 
-  const [initialState, setInitialState] = useState<any>([]);
+  const { initialState, setInitialState } = useModel('@@initialState');
+
+  const [travelState, setTravelState] = useState<any>([]);
 
   const setDataType = (res: any) => {
     return res.map((data: any) => {
@@ -25,15 +24,13 @@ const RightSider = () => {
       Object.keys(data).forEach((key) => {
         newObj[key] = data[key];
       });
-      console.log('newObj ', newObj);
       return newObj;
     });
   };
 
   useEffect(() => {
     caxios.get(`/travel`).then((res) => {
-      // console.log('res', res);
-      // setInitialState(setDataType(res.data));
+      setTravelState(setDataType(res.data));
     });
   }, []);
 
@@ -55,6 +52,14 @@ const RightSider = () => {
         break;
     }
   };
+
+  const travelDetailClick = (value: number) => {
+    console.log('value ', value);
+    setInitialState((s) => ({ ...s, currentTravel: value }));
+    console.log('currentTravel', initialState?.currentTravel);
+    history.push('/search/day');
+  };
+
   const [visible, setVisible] = useState<boolean>(false);
   return (
     <>
@@ -66,13 +71,28 @@ const RightSider = () => {
           일정추가
         </Button>
         <TravelFormModal visible={visible} setVisible={setVisible}></TravelFormModal>
-        {initialState.map((m) => (
-          <Card style={{ width: 300 }}>
-            <p>{m.travelName}</p>
-            <p>{m.startDate}</p>
-            <p>{m.endDate}</p>
-          </Card>
-        ))}
+        <div style={{ marginTop: 35 }}>
+          {travelState.map((m, idx) => (
+            <div className={styles.planDetailContainer} key={idx}>
+              <div className={styles.planDetailTitle}>{m.travelName}</div>
+              <div className={styles.planDetailTime}>
+                <p>시작일 : {m.startDate}</p>
+                <p>종료일 : {m.endDate}</p>
+              </div>
+              <div className={styles.planTypeNSetting}>
+                <div style={{ flex: 3 }}></div>
+                <div style={{ flex: 2, textAlign: 'right' }}>
+                  <Button
+                    shape="circle"
+                    type="default"
+                    icon={<SettingOutlined />}
+                    onClick={() => travelDetailClick(m.travelId)}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </>
   );
