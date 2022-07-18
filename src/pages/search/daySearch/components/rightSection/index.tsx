@@ -117,22 +117,23 @@ const RightSection = ({
           </Form.Item>
           <Form.Item label="여행 테마" name="theme">
             <Select>
-              <Select.Option value="tourism">관광</Select.Option>
-              <Select.Option value="food">먹방</Select.Option>
-              <Select.Option value="cafe">카페</Select.Option>
-              <Select.Option value="rest">휴식</Select.Option>
-              <Select.Option value="experience">체험</Select.Option>
-              <Select.Option value="extreme">익스트림</Select.Option>
+              <Select.Option value="TOURISM">관광</Select.Option>
+              <Select.Option value="FOOD">먹방</Select.Option>
+              <Select.Option value="CAFE">카페</Select.Option>
+              <Select.Option value="REST">휴식</Select.Option>
+              <Select.Option value="EXPERIENCE">체험</Select.Option>
+              <Select.Option value="EXTREME">익스트림</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="이동 수단" name="vehicle">
             <Select>
-              <Select.Option value="walk">걸어서</Select.Option>
-              <Select.Option value="subway">지하철</Select.Option>
-              <Select.Option value="tram">트램</Select.Option>
-              <Select.Option value="bus">버스</Select.Option>
-              <Select.Option value="taxi">택시</Select.Option>
-              <Select.Option value="airbus">비행기</Select.Option>
+              <Select.Option value="WALK">걸어서</Select.Option>
+              <Select.Option value="SUBWAY">지하철</Select.Option>
+              <Select.Option value="CAR">자동차</Select.Option>
+              <Select.Option value="TRAM">트램</Select.Option>
+              <Select.Option value="BUS">버스</Select.Option>
+              <Select.Option value="TAXI">택시</Select.Option>
+              <Select.Option value="AIRBUS">비행기</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="출발 시간" name="startTime">

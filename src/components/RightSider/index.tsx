@@ -19,6 +19,7 @@ const RightSider = () => {
   const [travelState, setTravelState] = useState<any>([]);
 
   const setDataType = (res: any) => {
+    console.log('res', res);
     return res.map((data: any) => {
       let newObj = {};
       Object.keys(data).forEach((key) => {
