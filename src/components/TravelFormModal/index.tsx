@@ -64,7 +64,7 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
         data: values,
       })
         .then(function (response) {
-          resultObj.inviteCode = response.inviteCode;
+          resultObj.inviteCode = response.data.inviteCode;
         })
         .catch(function (error) {
           resultObj.isSuccess = false;
@@ -104,7 +104,7 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
     if (!!total.sendEmail)
       if (e.code === 'Enter') {
         caxios.get(`/users/${total.sendEmail}`).then((res) => {
-          setTotal({ userEmails: res.data, sendEmail: '' });
+          setTotal({ userEmails: res.data.data, sendEmail: '' });
         });
       }
   };
@@ -148,7 +148,7 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
           >
             <Select
               showSearch
-              style={{ width: 200 }}
+              style={{ width: '100%' }}
               placeholder={'123'}
               optionFilterProp="children"
               filterOption={(input, option) =>
@@ -173,14 +173,15 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
             label="총 비용"
             rules={[{ required: true, message: '비용을 입력해주세요.' }]}
           >
-            <InputNumber min={1} placeholder="총 비용" />
+            <InputNumber
+              min={1}
+              placeholder="총 비용"
+              formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+              parser={(value) => value!.replace(/\$\s?|(,*)/g, '')}
+              style={{ width: '100%' }}
+            />
           </Form.Item>
-          <Form.Item
-            {...formItemLayout}
-            name="membersEmail"
-            label="멤버"
-            rules={[{ required: true, message: 'Please select your country!' }]}
-          >
+          <Form.Item {...formItemLayout} name="membersEmail" label="멤버">
             <Select
               mode="multiple"
               style={{ width: '100%' }}
