@@ -1,11 +1,22 @@
-import GMap from '@/components/GoogleMap/GMap';
 import SearchBox from '@/components/GoogleMap/SearchBox';
+import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import styles from './index.less';
 
-const Day = ({ locMarker, setLocMarker, setHasPrevious, detailForm }: any) => {
+const Day = ({
+  locMarker,
+  setLocMarker,
+  setHasPrevious,
+  detailForm,
+  openDetail,
+  setOpenDetail,
+}: any) => {
   const [places, setPlaces] = useState<any>(); // 검색 결과 리스트를 담는다.
+
+  const substr = (val: string) => {
+    return val.substring(5);
+  };
 
   // 리스트를 클릭하면 지도의 위치가 바뀐다.
   const changeCurrentMap = (geometry: any) => {
@@ -61,8 +72,15 @@ const Day = ({ locMarker, setLocMarker, setHasPrevious, detailForm }: any) => {
 
   return (
     <div>
+      <div style={{ paddingTop: 8 }}>
+        <Button
+          onClick={() => setOpenDetail({ open: false })}
+          shape="circle"
+          icon={<ArrowLeftOutlined />}
+        />
+      </div>
       <div className={styles.displaySelectedDate}>
-        <p>3.1(월)</p>
+        <p>{substr(openDetail?.currentDay)}</p>
       </div>
       <div style={{ height: '30px', marginTop: '10px', marginBottom: '20px' }}>
         <SearchBox locMarker={locMarker} setLocMarker={setLocMarker} setPlaces={setPlaces} />
