@@ -1,50 +1,33 @@
-import GMap from '@/components/GoogleMap/GMap';
-import SearchBox from '@/components/GoogleMap/SearchBox';
-import { Button } from 'antd';
-import React, { useState } from 'react';
+import Day from './day';
 import styles from './index.less';
 
-const LeftSection = ({ locMarker, setLocMarker, setHasPrevious, detailForm }: any) => {
-  const [places, setPlaces] = useState<any>(); // 검색 결과 리스트를 담는다.
-
-  // 리스트를 클릭하면 지도의 위치가 바뀐다.
-  const changeCurrentMap = (geometry: any) => {
-    setLocMarker({
-      location: {
-        lat: geometry?.location?.lat(),
-        lng: geometry?.location?.lng(),
-      },
-      zoom: 17, // zoom값은 숫자가 커질수록 더 가까이 보인다.
-    });
+const LeftSection = ({
+  locMarker,
+  setLocMarker,
+  setHasPrevious,
+  detailForm,
+  planData,
+  openDetail,
+  setOpenDetail,
+}: any) => {
+  const substr = (val: string) => {
+    return val.substring(5);
   };
 
-  const handleAddPlan = (data: any) => {
-    detailForm.setFieldsValue({
-      ...detailForm.getFieldsValue(),
-      planNm: data?.name,
-      lat: data.geometry.location.lat(),
-      lng: data.geometry.location.lng(),
+  const showDetailPlan = (data: any) => {
+    console.log(data);
+    setOpenDetail({
+      open: true,
+      planId: data.planId,
+      day: data.days,
+      currentDay: data.currentDay,
     });
-  };
-
-  // 세부 일정을 추가한다.
-  const addPlans = (data: any) => {
-    setHasPrevious(true);
-    handleAddPlan(data);
   };
 
   const PlanDetail = ({ data }: any) => {
     return (
-      <div className={styles.planDetailContainer} onClick={() => changeCurrentMap(data?.geometry)}>
-        <div className={styles.planDetailTitle}>{data?.name}</div>
-        <div className={styles.planDetailAddress}>{data?.formatted_address}</div>
-        <div className={styles.planTypeNSetting}>
-          <div style={{ flex: 2, textAlign: 'right' }}>
-            <Button shape="default" type="primary" /* type="link" */ onClick={() => addPlans(data)}>
-              일정 추가
-            </Button>
-          </div>
-        </div>
+      <div className={styles.planDetailContainer} onClick={() => showDetailPlan(data)}>
+        Day{data.days + 1} / {substr(data.currentDay)}
       </div>
     );
   };
@@ -52,8 +35,8 @@ const LeftSection = ({ locMarker, setLocMarker, setHasPrevious, detailForm }: an
   const Content = () => {
     return (
       <div className={styles.test2} style={{ flex: 1, height: 710 }}>
-        {places?.map((data: any) => {
-          return <PlanDetail data={data} key={data?.place_id} />;
+        {planData?.plans?.map((data: any) => {
+          return <PlanDetail data={data} key={data?.currentDay} />;
         })}
       </div>
     );
@@ -61,15 +44,24 @@ const LeftSection = ({ locMarker, setLocMarker, setHasPrevious, detailForm }: an
 
   return (
     <div className={styles.searchLeftSection}>
-      <div className={styles.displaySelectedDate}>
-        <p>3.1(월)</p>
-      </div>
-      <div style={{ height: '30px', marginTop: '10px', marginBottom: '20px' }}>
-        <GMap>
-          <SearchBox locMarker={locMarker} setLocMarker={setLocMarker} setPlaces={setPlaces} />
-        </GMap>
-      </div>
-      <Content />
+      {!openDetail.open ? (
+        <>
+          <div className={styles.displaySelectedDate}>
+            <p className={styles.travelName}>{planData?.travelName}</p>
+            <p style={{ fontSize: '26px' }}>{planData?.travelDate}</p>
+          </div>
+          <Content />
+        </>
+      ) : (
+        <Day
+          locMarker={locMarker}
+          setLocMarker={setLocMarker}
+          setHasPrevious={setHasPrevious}
+          detailForm={detailForm}
+          openDetail={openDetail}
+          setOpenDetail={setOpenDetail}
+        />
+      )}
     </div>
   );
 };

@@ -59,7 +59,7 @@ const GoogleMaps = () => {
   };
 
   const setDataType = (res: any) => {
-    return res.map((data: any) => {
+    return res?.map((data: any) => {
       let newObj = {};
       newObj['alarmLvl'] = data.alarmLvl;
       newObj['countryEngNm'] = data.countryEngNm;
