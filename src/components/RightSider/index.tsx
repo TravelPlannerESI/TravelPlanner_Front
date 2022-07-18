@@ -6,7 +6,7 @@ import { history, useModel } from 'umi';
 import styles from './index.less';
 import { DragOutlined, SettingOutlined } from '@ant-design/icons';
 import caxios from '@/util/caxios';
-
+import CustomPagination from '../CustomPagination';
 const RightSider = () => {
   const [isOpen, setIsOpen] = useState({
     style: 'rightSiderMenu active',
@@ -17,22 +17,28 @@ const RightSider = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const [travelState, setTravelState] = useState<any>([]);
+  const [page, setPage] = useState<number>(1);
 
   const setDataType = (res: any) => {
-    return res.map((data: any) => {
-      let newObj = {};
-      Object.keys(data).forEach((key) => {
-        newObj[key] = data[key];
-      });
-      return newObj;
-    });
+    const newObj = {};
+    newObj['totalCount'] = res.totalElements;
+    newObj['totalPages'] = res.totalPages;
+    newObj['content'] = res.content;
+    return newObj;
   };
 
   useEffect(() => {
-    caxios.get(`/travel`).then((res) => {
-      setTravelState(setDataType(res.data));
+    caxios.get(`/travel?size=5&page=0`).then((res) => {
+      setTravelState(setDataType(res.data.data));
     });
   }, []);
+
+  useEffect(() => {
+    console.log(travelState);
+    caxios.get(`/travel?size=5&page=${page - 1}`).then((res) => {
+      setTravelState(setDataType(res.data.data));
+    });
+  }, [page]);
 
   const handleClick = () => {
     switch (isOpen.menuStatus) {
@@ -54,9 +60,7 @@ const RightSider = () => {
   };
 
   const travelDetailClick = (value: number) => {
-    console.log('value ', value);
     setInitialState((s) => ({ ...s, currentTravel: value }));
-    console.log('currentTravel', initialState?.currentTravel);
     history.push('/search/day');
   };
 
@@ -72,7 +76,7 @@ const RightSider = () => {
         </Button>
         <TravelFormModal visible={visible} setVisible={setVisible}></TravelFormModal>
         <div style={{ marginTop: 35 }}>
-          {travelState.map((m, idx) => (
+          {travelState?.content?.map((m, idx) => (
             <div className={styles.planDetailContainer} key={idx}>
               <div className={styles.planDetailTitle}>{m.travelName}</div>
               <div className={styles.planDetailTime}>
@@ -93,6 +97,12 @@ const RightSider = () => {
             </div>
           ))}
         </div>
+        <CustomPagination
+          currentPage={page}
+          setPage={setPage}
+          pageCount={5}
+          totalPage={travelState.totalPages}
+        />
       </div>
     </>
   );
