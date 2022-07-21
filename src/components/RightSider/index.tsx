@@ -20,22 +20,11 @@ const RightSider = () => {
   const [page, setPage] = useState<number>(1);
 
   const setDataType = (res: any) => {
-<<<<<<< HEAD
-    console.log('res', res);
-    return res.map((data: any) => {
-      let newObj = {};
-      Object.keys(data).forEach((key) => {
-        newObj[key] = data[key];
-      });
-      return newObj;
-    });
-=======
     const newObj = {};
     newObj['totalCount'] = res.totalElements;
     newObj['totalPages'] = res.totalPages;
     newObj['content'] = res.content;
     return newObj;
->>>>>>> 65738f53a85182d656799c11278cdf34b6567bdd
   };
 
   useEffect(() => {

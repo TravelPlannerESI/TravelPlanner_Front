@@ -1,39 +1,32 @@
-import GMap from '@/components/GoogleMap/GMap';
-import SearchBox from '@/components/GoogleMap/SearchBox';
-import caxios from '@/util/caxios';
-import { Button } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
 import Day from './day';
 import styles from './index.less';
 
-const LeftSection = ({ locMarker, setLocMarker, setHasPrevious, detailForm }: any) => {
-  const { initialState, setInitialState } = useModel('@@initialState');
-
-  const [openDetail, setOpenDetail] = useState<any>({ planId: '', open: false });
-  const [planData, setPlanData] = useState<any>();
-
-  useEffect(() => {
-    // caxios.get(`/${initialState?.currentTravel}/plan`).then((res) => {
-    caxios.get(`/88/plan`).then((res) => {
-      let data = res?.data.data;
-      console.log(data);
-      setPlanData({ travelName: data.travelName, travelDate: data.travelDate, plans: data.plans });
-    });
-  }, []);
-
+const LeftSection = ({
+  locMarker,
+  setLocMarker,
+  setHasPrevious,
+  detailForm,
+  planData,
+  openDetail,
+  setOpenDetail,
+}: any) => {
   const substr = (val: string) => {
     return val.substring(5);
   };
 
-  const showSpecificPlan = (data: any) => {
+  const showDetailPlan = (data: any) => {
     console.log(data);
-    setOpenDetail({ planId: data.planId, open: true });
+    setOpenDetail({
+      open: true,
+      planId: data.planId,
+      day: data.days,
+      currentDay: data.currentDay,
+    });
   };
 
   const PlanDetail = ({ data }: any) => {
     return (
-      <div className={styles.planDetailContainer} onClick={() => showSpecificPlan(data)}>
+      <div className={styles.planDetailContainer} onClick={() => showDetailPlan(data)}>
         Day{data.days + 1} / {substr(data.currentDay)}
       </div>
     );
@@ -65,6 +58,8 @@ const LeftSection = ({ locMarker, setLocMarker, setHasPrevious, detailForm }: an
           setLocMarker={setLocMarker}
           setHasPrevious={setHasPrevious}
           detailForm={detailForm}
+          openDetail={openDetail}
+          setOpenDetail={setOpenDetail}
         />
       )}
     </div>

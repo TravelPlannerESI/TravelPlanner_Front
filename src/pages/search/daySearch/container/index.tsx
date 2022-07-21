@@ -1,3 +1,4 @@
+import caxios from '@/util/caxios';
 import { Form } from 'antd';
 import React, { useEffect, useState } from 'react';
 import LeftSection from '../components/leftSection';
@@ -7,13 +8,27 @@ import styles from './index.less';
 
 const Container = () => {
   const [locMarker, setLocMarker] = useState<any>(); // 지도에 marker를 찍기위한 좌표정보를 담는다.
-  const [plans, setPlans] = useState<any>([]); // "일정 추가" 버튼 클릭시 배열에 추가
   const [hasPrevious, setHasPrevious] = useState<boolean>(false);
   const [planDetail, setPlanDetail] = useState<any>();
   const [detailForm] = Form.useForm();
 
+  const [planData, setPlanData] = useState<any>();
+  const [openDetail, setOpenDetail] = useState<any>({
+    open: false,
+    planId: '',
+    day: '',
+    currentDay: '',
+  });
+
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(userLocation);
+
+    // caxios.get(`/${initialState?.currentTravel}/plan`).then((res) => {
+    caxios.get(`/88/plan`).then((res) => {
+      let data = res?.data.data;
+      console.log(data);
+      setPlanData({ travelName: data.travelName, travelDate: data.travelDate, plans: data.plans });
+    });
   }, []);
 
   // 최초 로딩시 사용자의 위치정보를 가져온다.
@@ -34,6 +49,9 @@ const Container = () => {
         setLocMarker={setLocMarker}
         setHasPrevious={setHasPrevious}
         detailForm={detailForm}
+        planData={planData}
+        openDetail={openDetail}
+        setOpenDetail={setOpenDetail}
       />
       <MiddleSection locMarker={locMarker} />
       <RightSection
