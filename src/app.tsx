@@ -5,7 +5,6 @@ import { PageLoading } from '@ant-design/pro-components';
 import type { RunTimeLayoutConfig } from 'umi';
 import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
-import initialState from './.umi/plugin-initial-state/models/initialState';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import caxios from './util/caxios';
 
@@ -32,7 +31,6 @@ export async function getInitialState(gubun?: boolean): Promise<{
 
     if (userInfo) {
       const resData = userInfo?.data;
-      console.log(resData);
       returnData = {
         name: resData.name,
         avatar: resData.picture,

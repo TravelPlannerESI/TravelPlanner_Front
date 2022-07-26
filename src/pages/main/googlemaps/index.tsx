@@ -75,7 +75,6 @@ const GoogleMaps = () => {
 
   // Marker를 드래그하고 내려놓은 곳의 정보를 가져온다.
   const onMarkerDragEnd = (e: any) => {
-    console.log(e);
     const lat = e.latLng.lat();
     const lng = e.latLng.lng();
     setCurrentPosition({ lat, lng });
