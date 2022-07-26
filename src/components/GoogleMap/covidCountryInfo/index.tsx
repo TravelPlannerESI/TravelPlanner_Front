@@ -6,7 +6,7 @@ const CovidCountryInfo = ({ locations }: any) => {
 
   // Marker를 클릭하면 정보를 가지고온다.
   const onSelect = (val: any) => {
-    console.log('onselect', val);
+    // console.log('onselect', val);
     setSelected(val);
   };
   // Marker icon변경

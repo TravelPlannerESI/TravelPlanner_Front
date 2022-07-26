@@ -68,7 +68,6 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
         })
         .catch(function (error) {
           resultObj.isSuccess = false;
-          console.log(error);
         })
         .finally(() => (resultObj.isSuccess ? success(resultObj.inviteCode) : fail()));
     } catch (errorInfo) {

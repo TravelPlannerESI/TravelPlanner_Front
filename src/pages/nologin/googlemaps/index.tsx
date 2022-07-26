@@ -30,7 +30,6 @@ const GoogleMaps = () => {
   // 최초 로딩시 모든 국가의 코로나 및 좌표를 조회한다.
   const getInitialData = () => {
     caxios.get(`/country`).then((res) => {
-      console.log('res', res);
       const response = res.data.data;
       setLocations(setDataType(response));
     });
@@ -53,7 +52,6 @@ const GoogleMaps = () => {
 
   // Marker를 드래그하고 내려놓은 곳의 정보를 가져온다.
   const onMarkerDragEnd = (e: any) => {
-    console.log(e);
     const lat = e.latLng.lat();
     const lng = e.latLng.lng();
     setCurrentPosition({ lat, lng });

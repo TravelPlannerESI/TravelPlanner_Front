@@ -34,7 +34,6 @@ const RightSider = () => {
   }, []);
 
   useEffect(() => {
-    console.log(travelState);
     caxios.get(`/travel?size=5&page=${page - 1}`).then((res) => {
       setTravelState(setDataType(res.data.data));
     });

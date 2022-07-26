@@ -15,7 +15,6 @@ const LeftSection = ({
   };
 
   const showDetailPlan = (data: any) => {
-    console.log(data);
     setOpenDetail({
       open: true,
       planId: data.planId,
