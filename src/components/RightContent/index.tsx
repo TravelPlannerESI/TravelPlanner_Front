@@ -4,7 +4,7 @@ import React from 'react';
 import { history, useModel } from 'umi';
 import Avatar from './AvatarDropdown';
 import styles from './index.less';
-
+import Toast from '../Toast';
 export type SiderTheme = 'light' | 'dark';
 
 const GlobalHeaderRight: React.FC = () => {
@@ -24,24 +24,27 @@ const GlobalHeaderRight: React.FC = () => {
   console.log('initialState?.currentUser', initialState?.currentUser);
 
   return (
-    <Space className={className}>
-      {initialState?.currentUser ? (
-        <>
-          {' '}
-          <Button
-            shape="circle"
-            type="primary"
-            icon={<SettingOutlined />}
-            onClick={() => {
-              history.push('/search/day');
-            }}
-          />
-          <Avatar />
-        </>
-      ) : (
-        <LoadingOutlined />
-      )}
-    </Space>
+    <>
+      <Toast email={initialState?.currentUser?.email} />
+      <Space className={className}>
+        {initialState?.currentUser ? (
+          <>
+            {' '}
+            <Button
+              shape="circle"
+              type="primary"
+              icon={<SettingOutlined />}
+              onClick={() => {
+                history.push('/search/day');
+              }}
+            />
+            <Avatar />
+          </>
+        ) : (
+          <LoadingOutlined />
+        )}
+      </Space>
+    </>
   );
 };
 export default GlobalHeaderRight;
