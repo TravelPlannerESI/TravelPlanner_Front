@@ -32,7 +32,7 @@ const Day = ({
   const handleAddPlan = (data: any) => {
     detailForm.setFieldsValue({
       ...detailForm.getFieldsValue(),
-      planNm: data?.name,
+      destinationName: data?.name,
       lat: data.geometry.location.lat(),
       lng: data.geometry.location.lng(),
     });

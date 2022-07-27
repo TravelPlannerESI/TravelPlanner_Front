@@ -1,6 +1,7 @@
 import caxios from '@/util/caxios';
 import { Form } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { useModel } from 'umi';
 import LeftSection from '../components/leftSection';
 import MiddleSection from '../components/middleSection';
 import RightSection from '../components/rightSection';
@@ -24,10 +25,14 @@ const Container = () => {
     navigator.geolocation.getCurrentPosition(userLocation);
 
     // caxios.get(`/${initialState?.currentTravel}/plan`).then((res) => {
-    caxios.get(`/88/plan`).then((res) => {
+    caxios.get(`/90/plan`).then((res) => {
       let data = res?.data.data;
-      console.log(data);
       setPlanData({ travelName: data.travelName, travelDate: data.travelDate, plans: data.plans });
+    });
+
+    caxios.get(`/planDetail/90`).then((res) => {
+      const { data: resData }: any = res;
+      setPlanDetail(resData?.data);
     });
   }, []);
 
@@ -60,6 +65,7 @@ const Container = () => {
         planDetail={planDetail}
         setPlanDetail={setPlanDetail}
         detailForm={detailForm}
+        openDetail={openDetail}
       />
     </div>
   );

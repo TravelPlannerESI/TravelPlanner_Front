@@ -2,7 +2,6 @@ import { Modal } from 'antd';
 import React, { useState } from 'react';
 
 export const success = (inviteCode: string) => {
-  console.log('success ', inviteCode);
   Modal.success({
     content: { inviteCode },
   });

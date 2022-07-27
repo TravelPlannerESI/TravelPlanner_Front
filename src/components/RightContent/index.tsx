@@ -21,8 +21,6 @@ const GlobalHeaderRight: React.FC = () => {
     className = `${styles.right}  ${styles.dark}`;
   }
 
-  console.log('initialState?.currentUser', initialState?.currentUser);
-
   return (
     <>
       <Toast email={initialState?.currentUser?.email} />
