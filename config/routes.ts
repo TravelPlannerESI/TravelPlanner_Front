@@ -19,6 +19,13 @@
     component: './main/Maps',
   },
   {
+    path: '/dashboard',
+    name: '대시보드',
+    layout: false,
+    icon: undefined,
+    component: './dashboard',
+  },
+  {
     path: '/search',
     name: '조회',
     icon: undefined,

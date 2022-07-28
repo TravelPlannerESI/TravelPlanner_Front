@@ -31,7 +31,7 @@ const GlobalHeaderRight: React.FC = () => {
             type="primary"
             icon={<SettingOutlined />}
             onClick={() => {
-              history.push('/search/day');
+              history.push('/dashboard');
             }}
           />
           <Avatar />
