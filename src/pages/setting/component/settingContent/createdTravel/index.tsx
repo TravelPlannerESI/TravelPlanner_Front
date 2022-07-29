@@ -50,7 +50,6 @@ const CreatedTravel = () => {
   useEffect(() => {
     caxios.get(`/setting/travel/made?size=5&page=0`).then((res) => {
       let pageData = res?.data.data;
-      // console.log(pageData);
 
       pageData &&
         setTravelOwnerData({
@@ -64,7 +63,6 @@ const CreatedTravel = () => {
   useEffect(() => {
     caxios.get(`/setting/travel/made?size=5&page=${page - 1}`).then((res) => {
       let pageData = res?.data.data;
-      // console.log(pageData);
 
       pageData &&
         setTravelOwnerData({
