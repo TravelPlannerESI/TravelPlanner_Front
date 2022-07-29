@@ -160,6 +160,7 @@ const ManageModal = ({ detailData, setDetailData, modalVisible, setModalVisible 
             dataSource={invitedMembers}
             rowKey={(item) => item.email}
             pagination={false}
+            style={{ height: '350px', overflowY: 'auto' }}
           />
         </div>
       </div>

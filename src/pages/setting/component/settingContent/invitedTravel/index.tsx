@@ -83,7 +83,6 @@ const InvitedTravel = () => {
     };
 
     caxios.put(`/setting/travel/${rowData.inviteCode}/response`, data).then((res) => {
-      console.log(res);
       getContentData(0);
       message.success(res.data.resultMsg);
     });
@@ -100,7 +99,6 @@ const InvitedTravel = () => {
   const getContentData = (pageNum: any) => {
     caxios.get(`/setting/travel/invited?size=5&page=${pageNum}`).then((res) => {
       let pageData = res?.data.data;
-      // console.log(pageData);
 
       pageData &&
         setInvitedTravelData({

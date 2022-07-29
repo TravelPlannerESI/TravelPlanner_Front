@@ -31,7 +31,6 @@ const GlobalHeaderRight: React.FC = () => {
             type="primary"
             icon={<SettingOutlined />}
             onClick={() => {
-              // history.push('/dashboard');
               history.push('/setting');
             }}
           />
