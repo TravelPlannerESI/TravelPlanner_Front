@@ -42,6 +42,11 @@
       { name: '계획 관리', path: '/manage/plan', component: './manage/PlanManage' },
     ],
   },
+  {
+    path: '/setting',
+    component: './setting',
+    menuRender: false,
+  },
 
   // {
   //   path: '/welcome',

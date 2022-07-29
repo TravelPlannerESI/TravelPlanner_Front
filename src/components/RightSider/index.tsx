@@ -28,15 +28,25 @@ const RightSider = () => {
   };
 
   useEffect(() => {
-    caxios.get(`/travel?size=5&page=0`).then((res) => {
-      setTravelState(setDataType(res.data.data));
-    });
+    caxios
+      .get(`/travel?size=5&page=0`)
+      .then((res) => {
+        setTravelState(setDataType(res.data.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   useEffect(() => {
-    caxios.get(`/travel?size=5&page=${page - 1}`).then((res) => {
-      setTravelState(setDataType(res.data.data));
-    });
+    caxios
+      .get(`/travel?size=5&page=${page - 1}`)
+      .then((res) => {
+        setTravelState(setDataType(res.data.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [page]);
 
   const handleClick = () => {
