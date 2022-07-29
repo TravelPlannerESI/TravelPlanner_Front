@@ -69,8 +69,9 @@ const RightSider = () => {
   };
 
   const travelDetailClick = (value: number) => {
-    setInitialState((s) => ({ ...s, currentTravel: value }));
-    history.push('/search/day');
+    caxios.put(`users/${value}`).then(() => {
+      history.push('/dashboard');
+    });
   };
 
   const [visible, setVisible] = useState<boolean>(false);

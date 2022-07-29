@@ -14,16 +14,15 @@
     ],
   },
   {
+    path: '/dashboard',
+    name: '대시보드',
+    icon: undefined,
+    component: './dashboard',
+  },
+  {
     path: '/',
     layout: false,
     component: './main/Maps',
-  },
-  {
-    path: '/dashboard',
-    name: '대시보드',
-    layout: false,
-    icon: undefined,
-    component: './dashboard',
   },
   {
     path: '/search',
