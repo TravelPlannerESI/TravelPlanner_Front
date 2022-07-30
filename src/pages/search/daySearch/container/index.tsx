@@ -30,7 +30,7 @@ const Container = () => {
       setPlanData({ travelName: data.travelName, travelDate: data.travelDate, plans: data.plans });
     });
 
-    caxios.get(`/planDetail/90`).then((res) => {
+    caxios.get(`/planDetail`).then((res) => {
       const { data: resData }: any = res;
       setPlanDetail(resData?.data);
     });

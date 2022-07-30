@@ -29,15 +29,25 @@ const RightSider = () => {
   };
 
   useEffect(() => {
-    caxios.get(`/travel?size=5`).then((res) => {
-      setTravelState(setDataType(res.data.data));
-    });
+    caxios
+      .get(`/travel?size=5&page=0`)
+      .then((res) => {
+        setTravelState(setDataType(res.data.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   useEffect(() => {
-    caxios.get(`/travel?size=5&page=${page - 1}`).then((res) => {
-      setTravelState(setDataType(res.data.data));
-    });
+    caxios
+      .get(`/travel?size=5&page=${page - 1}`)
+      .then((res) => {
+        setTravelState(setDataType(res.data.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, [page]);
 
   const handleClick = () => {
@@ -60,8 +70,9 @@ const RightSider = () => {
   };
 
   const travelDetailClick = (value: number) => {
-    setInitialState((s) => ({ ...s, currentTravel: value }));
-    history.push('/search/day');
+    caxios.put(`users/${value}`).then(() => {
+      history.push('/dashboard');
+    });
   };
 
   const [visible, setVisible] = useState<boolean>(false);

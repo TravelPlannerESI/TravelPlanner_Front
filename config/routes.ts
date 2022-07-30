@@ -14,6 +14,12 @@
     ],
   },
   {
+    path: '/dashboard',
+    name: '대시보드',
+    icon: undefined,
+    component: './dashboard',
+  },
+  {
     path: '/',
     layout: false,
     component: './main/Maps',
@@ -35,6 +41,11 @@
       { name: '일정 관리', path: '/manage/day', component: './manage/DayManage' },
       { name: '계획 관리', path: '/manage/plan', component: './manage/PlanManage' },
     ],
+  },
+  {
+    path: '/setting',
+    component: './setting',
+    menuRender: false,
   },
 
   // {
