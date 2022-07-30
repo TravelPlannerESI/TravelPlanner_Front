@@ -1,27 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Client } from '@stomp/stompjs';
-import { Badge, List, Button } from 'antd';
+import { Badge, List, Button, Avatar, Dropdown, Menu } from 'antd';
 import { BellOutlined } from '@ant-design/icons';
-import { size } from 'lodash';
+import caxios from '../../util/caxios';
+
 let client: Client | null = null;
 
 const Toast = ({ email }) => {
   const [content, setContent] = useState({ size: 0, content: [] });
-
-  const subscribe = () => {
-    if (client != null) {
-      client.subscribe(`/sub/toast/${email}`, (data: any) => {
-        const newMessage: string = JSON.parse(data.body).message as string;
-        console.log(data);
-      });
-    }
-  };
-
-  useEffect(() => {
-    connect();
-  }, []);
-
-  const addContent = (message: string) => {};
 
   const connect = () => {
     client = new Client({
@@ -30,12 +16,33 @@ const Toast = ({ email }) => {
         console.log(str);
       },
       onConnect: () => {
-        console.log(12312312312312312);
         subscribe();
       },
     });
 
     client.activate();
+  };
+
+  useEffect(() => {
+    connect();
+    caxios.get(`/travel/toast`).then((res) => {
+      const data = res.data.data;
+      console.log(data.length, '  ', data);
+      setContent({ size: data.length, content: data });
+    });
+  }, []);
+
+  const subscribe = () => {
+    console.log('start subscribe ', content);
+    if (client != null) {
+      client.subscribe(`/sub/toast/${email}`, (data: any) => {
+        console.log('run subscribe : ', content);
+        const body = JSON.parse(data.body);
+        const prevContent = content.content;
+        setContent((s) => ({ size: content.size + 1, content: [body, ...prevContent] }));
+      });
+    }
+    console.log('end subscribe ', content);
   };
 
   // const handler = (message: string) => {
@@ -57,14 +64,32 @@ const Toast = ({ email }) => {
     }
   };
 
+  const menu = (
+    <Menu>
+      {content.content.map((item, idx) => (
+        <Menu.Item>
+          <Avatar src={item?.inviteePicture} />
+          {`  ${item?.invitee}님께서 ${item?.travelName.slice(0, 6)}에 초대하셨습니다.`}
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+
   return (
     <>
-      <Badge style={{ marginTop: '10px', marginRight: '10px' }} count={80} size="small">
-        <Button
-          style={{ marginTop: '10px', marginRight: '10px' }}
-          icon={<BellOutlined style={{ color: 'white', fontSize: '22px' }} />}
-          type="text"
-        />
+      <Badge
+        style={{ marginTop: '10px', marginRight: '10px' }}
+        count={content.size}
+        size="small"
+        showZero
+      >
+        <Dropdown overlay={menu} trigger={['click']} placement="bottom">
+          <Button
+            style={{ marginTop: '10px', marginRight: '10px' }}
+            icon={<BellOutlined style={{ color: 'white', fontSize: '22px' }} />}
+            type="text"
+          />
+        </Dropdown>
       </Badge>
     </>
   );

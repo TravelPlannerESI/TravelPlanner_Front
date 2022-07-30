@@ -29,7 +29,7 @@ const RightSider = () => {
   };
 
   useEffect(() => {
-    caxios.get(`/travel?size=5&page=0`).then((res) => {
+    caxios.get(`/travel?size=5`).then((res) => {
       setTravelState(setDataType(res.data.data));
     });
   }, []);
