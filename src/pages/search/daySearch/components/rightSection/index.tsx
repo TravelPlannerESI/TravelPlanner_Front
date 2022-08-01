@@ -61,7 +61,6 @@ const RightSection = ({
     let data: any = {
       ...detailForm.getFieldsValue(),
       planId: openDetail?.planId,
-      travelId: 90,
     };
 
     if (data?.arrivalTime) {

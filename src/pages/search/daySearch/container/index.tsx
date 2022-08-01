@@ -1,7 +1,6 @@
 import caxios from '@/util/caxios';
 import { Form } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useEffect, useState } from 'react';
 import LeftSection from '../components/leftSection';
 import MiddleSection from '../components/middleSection';
 import RightSection from '../components/rightSection';
@@ -24,17 +23,29 @@ const Container = () => {
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(userLocation);
 
-    // caxios.get(`/${initialState?.currentTravel}/plan`).then((res) => {
-    caxios.get(`/90/plan`).then((res) => {
-      let data = res?.data.data;
-      setPlanData({ travelName: data.travelName, travelDate: data.travelDate, plans: data.plans });
-    });
-
     caxios.get(`/planDetail`).then((res) => {
-      const { data: resData }: any = res;
-      setPlanDetail(resData?.data);
+      const resData = res.data?.data;
+      const plans = resData?.plans;
+      const planDetails = resData?.planDetails;
+
+      setPlanData({
+        travelName: resData?.travelName,
+        travelDate: setTravelDate(plans),
+        plans: plans,
+      });
+      setPlanDetail(planDetails);
     });
   }, []);
+
+  const setTravelDate = (plans: any) => {
+    let s = plans[0]?.currentDay;
+    let e = plans[plans.length - 1]?.currentDay;
+
+    let start = s.substring(5);
+    let end = e.substring(5);
+
+    return `${start} ~ ${end}`;
+  };
 
   // 최초 로딩시 사용자의 위치정보를 가져온다.
   const userLocation = ({ coords }: any) => {
