@@ -5,6 +5,7 @@ import LeftSection from '../components/leftSection';
 import MiddleSection from '../components/middleSection';
 import RightSection from '../components/rightSection';
 import styles from './index.less';
+import { getZoom, setTravelDate } from '../utils';
 
 const Container = () => {
   const [locMarker, setLocMarker] = useState<any>(); // 지도에 marker를 찍기위한 좌표정보를 담는다.
@@ -21,7 +22,7 @@ const Container = () => {
   });
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(userLocation);
+    //
 
     caxios.get(`/planDetail`).then((res) => {
       const resData = res.data?.data;
@@ -34,26 +35,34 @@ const Container = () => {
         plans: plans,
       });
       setPlanDetail(planDetails);
+
+      planDetails && planDetails.length !== 0
+        ? planDetailLocation(planDetails)
+        : navigator.geolocation.getCurrentPosition(userLocation);
     });
   }, []);
 
-  const setTravelDate = (plans: any) => {
-    let s = plans[0]?.currentDay;
-    let e = plans[plans.length - 1]?.currentDay;
+  // 최초 로딩시 사용자의 위치정보를 가져온다.
+  const planDetailLocation = (planDetails: any) => {
+    let locArr = planDetails?.map((data: any) => {
+      return { lat: Number.parseFloat(data.lat), lng: Number.parseFloat(data.lng) };
+    });
 
-    let start = s.substring(5);
-    let end = e.substring(5);
-
-    return `${start} ~ ${end}`;
+    setLocMarker({
+      location: locArr,
+      zoom: getZoom(locArr),
+    });
   };
 
   // 최초 로딩시 사용자의 위치정보를 가져온다.
   const userLocation = ({ coords }: any) => {
     setLocMarker({
-      location: {
-        lat: coords?.latitude,
-        lng: coords?.longitude,
-      },
+      location: [
+        {
+          lat: coords?.latitude,
+          lng: coords?.longitude,
+        },
+      ],
       zoom: 16,
     });
   };
