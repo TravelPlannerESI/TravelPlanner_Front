@@ -61,7 +61,6 @@ const RightSection = ({
     let data: any = {
       ...detailForm.getFieldsValue(),
       planId: openDetail?.planId,
-      travelId: 90,
     };
 
     if (data?.arrivalTime) {
@@ -81,7 +80,7 @@ const RightSection = ({
   const convertTime = (arrivalTime: any, departureTime: any) => {
     let str: any = '';
 
-    console.log('departureTime', departureTime);
+    // console.log('departureTime', departureTime);
 
     if (arrivalTime) str = arrivalTime;
     if (arrivalTime || departureTime) str = str + ' ~ ';
@@ -91,7 +90,7 @@ const RightSection = ({
   };
 
   const PlanDetailForm = ({ data }: any) => {
-    console.log('data', data);
+    // console.log('data', data);
     return (
       <div className={styles.planDetailContainer}>
         <div className={styles.planDetailTitle}>{data?.destinationName}</div>

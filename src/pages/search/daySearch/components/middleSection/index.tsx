@@ -8,15 +8,20 @@ const MiddleSection = ({ locMarker }: any) => {
       <GMap>
         <GoogleMap
           mapContainerStyle={{ height: '100%', width: '100%' }}
-          center={locMarker?.location}
+          center={locMarker?.location[0]}
           zoom={locMarker?.zoom}
         >
-          <Marker
-            position={locMarker?.location}
-            icon={{
-              url: require(`@/components/GoogleMap/asset/pin2-1.png`),
-            }}
-          />
+          {locMarker?.location.map((loc: any, index: any) => {
+            return (
+              <Marker
+                key={index}
+                position={loc}
+                icon={{
+                  url: require(`@/components/GoogleMap/asset/pin2-1.png`),
+                }}
+              />
+            );
+          })}
         </GoogleMap>
       </GMap>
     </div>
