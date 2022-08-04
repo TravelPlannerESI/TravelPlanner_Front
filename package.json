@@ -50,6 +50,7 @@
     "@ant-design/icons": "^4.7.0",
     "@ant-design/pro-components": "1.1.1",
     "@react-google-maps/api": "^2.12.0",
+    "@stomp/stompjs": "^6.1.2",
     "@types/google-map-react": "^2.1.7",
     "@umijs/route-utils": "^2.0.0",
     "antd": "^4.20.0",

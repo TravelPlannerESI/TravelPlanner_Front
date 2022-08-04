@@ -13,6 +13,7 @@ import styles from './index.less';
 
 export type GlobalHeaderRightProps = {
   menu?: boolean;
+  client?: any;
 };
 
 const loginOut = async () => {
@@ -26,7 +27,7 @@ const loginOut = async () => {
   });
 };
 
-const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
+const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu, client }) => {
   const { initialState, setInitialState } = useModel('@@initialState');
 
   const onMenuClick = useCallback(
@@ -36,6 +37,11 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
         setInitialState((s) => ({ ...s, currentUser: undefined }));
         caxios.post(`/logout`);
         loginOut();
+
+        if (client != null) {
+          if (client.connected) client.forceDisconnect();
+        }
+
         return;
       }
       history.push(`/account/${key}`);
@@ -95,14 +101,16 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = ({ menu }) => {
   );
 
   return (
-    <HeaderDropdown overlay={menuHeaderDropdown}>
-      <span className={`${styles.action} ${styles.account}`}>
-        <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
-        <span style={{ color: 'white' }} className={`${styles.name} anticon`}>
-          {currentUser.name}
+    <>
+      <HeaderDropdown overlay={menuHeaderDropdown}>
+        <span className={`${styles.action} ${styles.account}`}>
+          <Avatar size="small" className={styles.avatar} src={currentUser.avatar} alt="avatar" />
+          <span style={{ color: 'white' }} className={`${styles.name} anticon`}>
+            {currentUser.name}
+          </span>
         </span>
-      </span>
-    </HeaderDropdown>
+      </HeaderDropdown>
+    </>
   );
 };
 

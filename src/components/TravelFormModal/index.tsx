@@ -44,7 +44,27 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
       afterClose: () => afterClose(),
     });
   };
+  const [locations, setLocations] = useState([]);
 
+  const getInitialData = () => {
+    caxios.get(`/country`).then((res) => {
+      const response = res?.data.data;
+      response && setLocations(setDataType(response));
+    });
+  };
+
+  const setDataType = (res: any) => {
+    return res?.map((data: any) => {
+      let newObj = {};
+      newObj['value'] = data.countryNm;
+      newObj['title'] = data.countryNm;
+      return newObj;
+    });
+  };
+
+  useEffect(() => {
+    getInitialData();
+  }, []);
   const fail = () => {
     Modal.error({
       title: 'This is an error message',
@@ -90,10 +110,6 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
     ],
   };
 
-  const options = [
-    { value: '한국', title: '한국' },
-    { value: '일본', title: '일본' },
-  ];
   const [total, setTotal] = useState({
     userEmails: [],
     sendEmail: '',
@@ -159,7 +175,7 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
                   .localeCompare((optionB!.children as unknown as string).toLowerCase())
               }
             >
-              {options.map((o, idx) => (
+              {locations.map((o, idx) => (
                 <Option value={o.value} key={idx}>
                   {o.title}
                 </Option>
