@@ -12,10 +12,13 @@ const SearchBox = ({ locMarker, setLocMarker, setPlaces }: any) => {
   const onPlacesChanged = () => {
     if (searchBox !== null && searchBox?.getPlaces() !== undefined) {
       setLocMarker({
-        location: {
-          lat: searchBox?.getPlaces()[0]?.geometry?.location?.lat(),
-          lng: searchBox?.getPlaces()[0]?.geometry?.location?.lng(),
-        },
+        location: [
+          {
+            lat: searchBox?.getPlaces()[0]?.geometry?.location?.lat(),
+            lng: searchBox?.getPlaces()[0]?.geometry?.location?.lng(),
+          },
+          ...locMarker?.location,
+        ],
         zoom: 17, // zoom값은 숫자가 커질수록 더 가까이 보인다.
       });
 

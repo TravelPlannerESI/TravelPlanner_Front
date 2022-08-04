@@ -7,7 +7,7 @@ import caxios from '../../util/caxios';
 let client: Client | null = null;
 
 const Toast = ({ email }) => {
-  const [content, setContent] = useState({ size: 0, content: [], initialize: 0 });
+  const [content, setContent] = useState({ size: 0, content: [] });
 
   const connect = () => {
     client = new Client({
@@ -23,29 +23,33 @@ const Toast = ({ email }) => {
     client.activate();
   };
   useEffect(() => {
+    connect();
     caxios.get(`/travel/toast`).then((res) => {
       const data = res.data.data;
-      setContent({ size: data.length, content: data, initialize: 1 });
+      const json = JSON.stringify({ size: data.length, content: data });
+      sessionStorage.setItem('temp', json);
     });
   }, []);
 
-  useEffect(() => {
-    if (content.initialize === 1) {
-      connect();
-      setContent((s) => ({ ...s, initialize: content.initialize + 1 }));
-    }
-  }, [content]);
-
   const addContent = (data: any) => {
-    const prevContent = content.content;
-    setContent({ size: content.size + 1, content: [data, ...prevContent] });
+    const item: any = JSON.parse(sessionStorage.getItem('temp'));
+
+    sessionStorage.setItem(
+      'temp',
+      JSON.stringify({ size: item.size + 1, content: [data, ...item.content] }),
+    );
+
+    // const addData = JSON.parse(sessionStorage.getItem('temp'));
+    // sessionStorage.setItem('temp', { size: item?.size + 1, content: [data, ...item.content] });
+
+    setContent({ size: item.size, content: item.content });
   };
 
   const subscribe = () => {
     if (client != null) {
       client.subscribe(`/sub/toast/${email}`, (data: any) => {
         const body = JSON.parse(data.body);
-        console.log('contentSize run Subscribe = ', content.size);
+        // console.log('contentSize run Subscribe = ', content.size);
         addContent(body);
       });
     }
@@ -71,12 +75,14 @@ const Toast = ({ email }) => {
 
   const menu = (
     <Menu style={{ height: '300px', overflowY: 'auto' }}>
-      {content.content.map((item, idx) => (
-        <Menu.Item key={`menu${idx}`}>
-          <Avatar src={item?.inviteePicture} />
-          {`  ${item?.invitee}님께서 ${item?.travelName.slice(0, 6)}에 초대하셨습니다.`}
-        </Menu.Item>
-      ))}
+      {JSON.parse(sessionStorage.getItem('temp') || JSON.stringify('')).content?.map(
+        (item, idx) => (
+          <Menu.Item key={`menu${idx}`}>
+            <Avatar src={item?.inviteePicture} />
+            {`  ${item?.invitee}님께서 ${item?.travelName.slice(0, 6)}에 초대하셨습니다.`}
+          </Menu.Item>
+        ),
+      )}
     </Menu>
   );
 
@@ -84,7 +90,7 @@ const Toast = ({ email }) => {
     <>
       <Badge
         style={{ marginTop: '10px', marginRight: '10px' }}
-        count={content.size}
+        count={JSON.parse(sessionStorage.getItem('temp'))?.size}
         size="small"
         showZero
       >

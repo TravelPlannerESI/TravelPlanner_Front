@@ -21,10 +21,13 @@ const Day = ({
   // 리스트를 클릭하면 지도의 위치가 바뀐다.
   const changeCurrentMap = (geometry: any) => {
     setLocMarker({
-      location: {
-        lat: geometry?.location?.lat(),
-        lng: geometry?.location?.lng(),
-      },
+      location: [
+        {
+          lat: geometry?.location?.lat(),
+          lng: geometry?.location?.lng(),
+        },
+        ...locMarker?.location,
+      ],
       zoom: 17, // zoom값은 숫자가 커질수록 더 가까이 보인다.
     });
   };
