@@ -1,10 +1,18 @@
 import caxios from '@/util/caxios';
-import { ArrowLeftOutlined, DragOutlined, SaveOutlined, SettingOutlined } from '@ant-design/icons';
+import {
+  ArrowDownOutlined,
+  ArrowLeftOutlined,
+  DragOutlined,
+  SaveOutlined,
+  SettingOutlined,
+} from '@ant-design/icons';
 import { Button, Form, Input, InputNumber, Select, TimePicker } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import React from 'react';
 import styles from './index.less';
+import { theme } from './theme';
+import { vehicle } from './vehicle';
 
 const RightSection = ({
   hasPrevious,
@@ -35,18 +43,21 @@ const RightSection = ({
     );
   };
 
-  const CTag = ({ title }: any) => {
-    return (
+  const CTag = ({ optionValue, kinds }: any) => {
+    const target = kinds === 'theme' ? theme : vehicle;
+    return optionValue ? (
       <span
         className={styles.tag}
         style={{
-          color: '#cf1322',
-          background: '#fff1f0',
-          borderColor: '#ffa39e',
+          color: target[optionValue].color,
+          background: target[optionValue].background,
+          borderColor: target[optionValue].borderColor,
         }}
       >
-        {title}
+        {target[optionValue].name}
       </span>
+    ) : (
+      <></>
     );
   };
 
@@ -106,8 +117,6 @@ const RightSection = ({
     if (data?.departureTime) {
       data.departureTime = moment(data.departureTime).format('HH:mm');
     }
-    console.log('planDetail', planDetail);
-    console.log('data', data);
 
     await axios.put(`/api/v1/planDetail/${data.planDetailId}`, JSON.stringify(data), {
       headers: {
@@ -148,28 +157,34 @@ const RightSection = ({
 
   const PlanDetailForm = ({ data }: any) => {
     return (
-      <div className={styles.planDetailContainer}>
-        <div className={styles.planDetailTitle}>{data?.destinationName}</div>
-        <div className={styles.planDetailTime}>
-          {convertTime(data.arrivalTime, data.departureTime)}
+      <>
+        <div style={{ textAlign: 'center', marginBottom: 5 }}>
+          <ArrowDownOutlined style={{ fontWeight: '900', color: 'black' }} />{' '}
+          <CTag optionValue={data.vehicle} kinds="vehicle" />
         </div>
-        <div className={styles.planTypeNSetting}>
-          <div style={{ flex: 3 }}>
-            <CTag title={data?.vehicle} />
+        <div className={styles.planDetailContainer}>
+          <div className={styles.planDetailTitle}>{data?.destinationName}</div>
+          <div className={styles.planDetailTime}>
+            {convertTime(data.arrivalTime, data.departureTime)}
           </div>
-          <div style={{ flex: 2, textAlign: 'right' }}>
-            <Button
-              shape="circle"
-              type="default"
-              icon={<SettingOutlined />}
-              onClick={() => {
-                handleSetting(data);
-              }}
-            />
-            <Button shape="circle" type="default" icon={<DragOutlined />} />
+          <div className={styles.planTypeNSetting}>
+            <div style={{ flex: 3 }}>
+              <CTag optionValue={data?.travelTheme} kinds="theme" />
+            </div>
+            <div style={{ flex: 2, textAlign: 'right' }}>
+              <Button
+                shape="circle"
+                type="default"
+                icon={<SettingOutlined />}
+                onClick={() => {
+                  handleSetting(data);
+                }}
+              />
+              <Button shape="circle" type="default" icon={<DragOutlined />} />
+            </div>
           </div>
         </div>
-      </div>
+      </>
     );
   };
 
