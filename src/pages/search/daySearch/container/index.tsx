@@ -76,6 +76,7 @@ const Container = () => {
         planData={planData}
         openDetail={openDetail}
         setOpenDetail={setOpenDetail}
+        setPlanDetail={setPlanDetail}
       />
       <MiddleSection locMarker={locMarker} />
       <RightSection
