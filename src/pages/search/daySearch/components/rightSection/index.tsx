@@ -15,9 +15,20 @@ const RightSection = ({
   detailForm,
 }: any) => {
   const ButtonLayout = () => {
-    return hasPrevious ? (
+    return hasPrevious?.flag ? (
       <div style={{ paddingTop: 8 }}>
-        <Button onClick={() => setHasPrevious(false)} shape="circle" icon={<ArrowLeftOutlined />} />
+        <Button
+          onClick={() => {
+            setHasPrevious({
+              flag: false,
+              method: '',
+            });
+
+            detailForm.resetFields();
+          }}
+          shape="circle"
+          icon={<ArrowLeftOutlined />}
+        />
       </div>
     ) : (
       <div style={{ paddingTop: 8, fontWeight: 900 }}>LIST</div>
@@ -40,13 +51,19 @@ const RightSection = ({
   };
 
   const handleSetting = (detail: any) => {
-    setHasPrevious(true);
+    setHasPrevious({
+      flag: true,
+      method: 'update',
+    });
+
+    const arrivalTime: any = detail?.arrivalTime && moment(detail?.arrivalTime, 'HH:mm:ss');
+    const departureTime: any = detail?.departureTime && moment(detail?.departureTime, 'HH:mm:ss');
 
     detailForm.setFieldsValue({
       destinationName: detail?.destinationName,
-      arrivalTime: detail?.arrivalTime,
+      arrivalTime: arrivalTime,
+      departureTime: departureTime,
       cost: detail?.cost,
-      departureTime: detail?.departureTime,
       lat: detail?.lat,
       lng: detail?.lng,
       memo: detail?.memo,
@@ -61,6 +78,7 @@ const RightSection = ({
     let data: any = {
       ...detailForm.getFieldsValue(),
       planId: openDetail?.planId,
+      travelId: 90,
     };
 
     if (data?.arrivalTime) {
@@ -77,20 +95,58 @@ const RightSection = ({
     });
   };
 
+  const handleUpdate = async () => {
+    let data: any = {
+      ...detailForm.getFieldsValue(),
+    };
+
+    if (data?.arrivalTime) {
+      data.arrivalTime = moment(data.arrivalTime).format('HH:mm');
+    }
+    if (data?.departureTime) {
+      data.departureTime = moment(data.departureTime).format('HH:mm');
+    }
+    console.log('planDetail', planDetail);
+    console.log('data', data);
+
+    await axios.put(`/api/v1/planDetail/${data.planDetailId}`, JSON.stringify(data), {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    let detail: any = [];
+    Object.keys(planDetail).forEach((el) => {
+      if (planDetail[el].planDetailId === data?.planDetailId) {
+        detail.push(data);
+      } else {
+        detail.push(planDetail[el]);
+      }
+    });
+    setPlanDetail(detail);
+  };
+
   const convertTime = (arrivalTime: any, departureTime: any) => {
     let str: any = '';
+    let transAvtime;
+    let transDptime;
 
-    // console.log('departureTime', departureTime);
+    if (arrivalTime) {
+      transAvtime = arrivalTime.split(':')[0] + ':' + arrivalTime.split(':')[1];
+    }
 
-    if (arrivalTime) str = arrivalTime;
+    if (departureTime) {
+      transDptime = departureTime.split(':')[0] + ':' + departureTime.split(':')[1];
+    }
+
+    if (arrivalTime) str = transAvtime;
     if (arrivalTime || departureTime) str = str + ' ~ ';
-    if (departureTime) str = str + departureTime;
+    if (departureTime) str = str + transDptime;
 
     return str;
   };
 
   const PlanDetailForm = ({ data }: any) => {
-    // console.log('data', data);
     return (
       <div className={styles.planDetailContainer}>
         <div className={styles.planDetailTitle}>{data?.destinationName}</div>
@@ -118,78 +174,139 @@ const RightSection = ({
   };
 
   const DetailForm = () => {
-    return (
-      <div style={{ padding: 3 }}>
-        <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 30 }}>
-          여행 정보
-          <div style={{ float: 'right' }}>
-            <Button
-              onClick={() => {
-                handleSave();
-              }}
-              icon={<SaveOutlined />}
-            >
-              저장
-            </Button>
+    if (hasPrevious?.method === 'insert') {
+      return (
+        <div style={{ padding: 3 }}>
+          <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 30 }}>
+            여행 정보
+            <div style={{ float: 'right' }}>
+              <Button
+                onClick={() => {
+                  handleSave();
+                }}
+                icon={<SaveOutlined />}
+              >
+                저장
+              </Button>
+            </div>
           </div>
-        </div>
-        <Form
-          labelCol={{ span: 9 }}
-          name="control-hooks"
-          wrapperCol={{ span: 17 }}
-          layout="horizontal"
-          form={detailForm}
-        >
-          <Form.Item
-            label="여행지 명"
-            name="destinationName"
-            rules={[{ required: true, message: '필수입력' }]}
+          <Form
+            labelCol={{ span: 9 }}
+            name="control-hooks"
+            wrapperCol={{ span: 17 }}
+            layout="horizontal"
+            form={detailForm}
           >
-            <Input />
-          </Form.Item>
-          <Form.Item label="여행 테마" name="travelTheme">
-            <Select>
-              <Select.Option value="TOURISM">관광</Select.Option>
-              <Select.Option value="FOOD">먹방</Select.Option>
-              <Select.Option value="CAFE">카페</Select.Option>
-              <Select.Option value="REST">휴식</Select.Option>
-              <Select.Option value="EXPERIENCE">체험</Select.Option>
-              <Select.Option value="EXTREME">익스트림</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="이동 수단" name="vehicle">
-            <Select>
-              <Select.Option value="WALK">걸어서</Select.Option>
-              <Select.Option value="SUBWAY">지하철</Select.Option>
-              <Select.Option value="CAR">자동차</Select.Option>
-              <Select.Option value="TRAM">트램</Select.Option>
-              <Select.Option value="BUS">버스</Select.Option>
-              <Select.Option value="TAXI">택시</Select.Option>
-              <Select.Option value="AIRBUS">비행기</Select.Option>
-            </Select>
-          </Form.Item>
-          <Form.Item label="출발 시간" name="arrivalTime">
-            <TimePicker />
-          </Form.Item>
-          <Form.Item label="도착 시간" name="departureTime">
-            <TimePicker />
-          </Form.Item>
-          <Form.Item label="비용" name="cost">
-            <InputNumber
-              formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-              style={{ width: '100%' }}
-            />
-          </Form.Item>
-          <Form.Item hidden={true} name="lat" />
-          <Form.Item hidden={true} name="lng" />
-          <Form.Item hidden={true} name="planDetailId" />
-        </Form>
-      </div>
-    );
+            <Form.Item
+              label="여행지 명"
+              name="destinationName"
+              rules={[{ required: true, message: '필수입력' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item label="여행 테마" name="travelTheme">
+              <Select>
+                <Select.Option value="TOURISM">관광</Select.Option>
+                <Select.Option value="FOOD">먹방</Select.Option>
+                <Select.Option value="CAFE">카페</Select.Option>
+                <Select.Option value="REST">휴식</Select.Option>
+                <Select.Option value="EXPERIENCE">체험</Select.Option>
+                <Select.Option value="EXTREME">익스트림</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="이동 수단" name="vehicle">
+              <Select>
+                <Select.Option value="WALK">걸어서</Select.Option>
+                <Select.Option value="SUBWAY">지하철</Select.Option>
+                <Select.Option value="CAR">자동차</Select.Option>
+                <Select.Option value="TRAM">트램</Select.Option>
+                <Select.Option value="BUS">버스</Select.Option>
+                <Select.Option value="TAXI">택시</Select.Option>
+                <Select.Option value="AIRBUS">비행기</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="출발 시간" name="arrivalTime">
+              <TimePicker format={'HH:mm'} />
+            </Form.Item>
+            <Form.Item label="도착 시간" name="departureTime">
+              <TimePicker format={'HH:mm'} />
+            </Form.Item>
+            <Form.Item label="비용" name="cost">
+              <InputNumber
+                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
+            <Form.Item hidden={true} name="lat" />
+            <Form.Item hidden={true} name="lng" />
+          </Form>
+        </div>
+      );
+    } else {
+      return (
+        <div style={{ padding: 3 }}>
+          <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 30 }}>여행 정보</div>
+          <Form
+            labelCol={{ span: 9 }}
+            name="control-hooks"
+            wrapperCol={{ span: 17 }}
+            layout="horizontal"
+            form={detailForm}
+            onFieldsChange={() => {
+              handleUpdate();
+            }}
+          >
+            <Form.Item
+              label="여행지 명"
+              name="destinationName"
+              rules={[{ required: true, message: '필수입력' }]}
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item label="여행 테마" name="travelTheme">
+              <Select>
+                <Select.Option value="TOURISM">관광</Select.Option>
+                <Select.Option value="FOOD">먹방</Select.Option>
+                <Select.Option value="CAFE">카페</Select.Option>
+                <Select.Option value="REST">휴식</Select.Option>
+                <Select.Option value="EXPERIENCE">체험</Select.Option>
+                <Select.Option value="EXTREME">익스트림</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="이동 수단" name="vehicle">
+              <Select>
+                <Select.Option value="WALK">걸어서</Select.Option>
+                <Select.Option value="SUBWAY">지하철</Select.Option>
+                <Select.Option value="CAR">자동차</Select.Option>
+                <Select.Option value="TRAM">트램</Select.Option>
+                <Select.Option value="BUS">버스</Select.Option>
+                <Select.Option value="TAXI">택시</Select.Option>
+                <Select.Option value="AIRBUS">비행기</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item label="출발 시간" name="arrivalTime">
+              <TimePicker format={'HH:mm'} />
+            </Form.Item>
+            <Form.Item label="도착 시간" name="departureTime">
+              <TimePicker format={'HH:mm'} />
+            </Form.Item>
+            <Form.Item label="비용" name="cost">
+              <InputNumber
+                formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                style={{ width: '100%' }}
+              />
+            </Form.Item>
+            <Form.Item hidden={true} name="lat" />
+            <Form.Item hidden={true} name="lng" />
+            <Form.Item hidden={true} name="planDetailId" />
+          </Form>
+        </div>
+      );
+    }
   };
 
   const Content = () => {
-    return hasPrevious ? (
+    return hasPrevious?.flag ? (
       <div className={styles.test1} style={{ flex: 1, height: 790 }}>
         <div
           style={{
