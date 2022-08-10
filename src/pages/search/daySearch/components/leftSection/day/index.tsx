@@ -1,7 +1,9 @@
 import SearchBox from '@/components/GoogleMap/SearchBox';
+import caxios from '@/util/caxios';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Button } from 'antd';
 import { useState } from 'react';
+import { getZoom } from '../../../utils';
 import styles from './index.less';
 
 const Day = ({
@@ -11,6 +13,7 @@ const Day = ({
   detailForm,
   openDetail,
   setOpenDetail,
+  setPlanDetail,
 }: any) => {
   const [places, setPlaces] = useState<any>(); // 검색 결과 리스트를 담는다.
 
@@ -21,18 +24,16 @@ const Day = ({
   // 리스트를 클릭하면 지도의 위치가 바뀐다.
   const changeCurrentMap = (geometry: any) => {
     setLocMarker({
-      location: [
-        {
-          lat: geometry?.location?.lat(),
-          lng: geometry?.location?.lng(),
-        },
-        ...locMarker?.location,
-      ],
+      location: {
+        lat: geometry?.location?.lat(),
+        lng: geometry?.location?.lng(),
+      },
       zoom: 17, // zoom값은 숫자가 커질수록 더 가까이 보인다.
     });
   };
 
   const handleAddPlan = (data: any) => {
+    detailForm.resetFields();
     detailForm.setFieldsValue({
       ...detailForm.getFieldsValue(),
       destinationName: data?.name,
@@ -43,7 +44,10 @@ const Day = ({
 
   // 세부 일정을 추가한다.
   const addPlans = (data: any) => {
-    setHasPrevious(true);
+    setHasPrevious({
+      flag: true,
+      method: 'insert',
+    });
     handleAddPlan(data);
   };
 
@@ -73,14 +77,46 @@ const Day = ({
     );
   };
 
+  const handlePrevious = () => {
+    setOpenDetail({ open: false });
+
+    caxios.get(`/planDetail`).then((res) => {
+      const resData = res.data?.data;
+      const planDetails = resData?.planDetails;
+      setPlanDetail(planDetails);
+
+      planDetails && planDetails.length !== 0
+        ? planDetailLocation(planDetails)
+        : navigator.geolocation.getCurrentPosition(userLocation);
+    });
+  };
+
+  // 최초 로딩시 사용자의 위치정보를 가져온다.
+  const planDetailLocation = (planDetails: any) => {
+    let locArr = planDetails?.map((data: any) => {
+      return { lat: Number.parseFloat(data.lat), lng: Number.parseFloat(data.lng) };
+    });
+    setLocMarker({
+      location: locArr,
+      zoom: getZoom(locArr),
+    });
+  };
+
+  // 최초 로딩시 사용자의 위치정보를 가져온다.
+  const userLocation = ({ coords }: any) => {
+    setLocMarker({
+      location: {
+        lat: coords?.latitude,
+        lng: coords?.longitude,
+      },
+      zoom: 16,
+    });
+  };
+
   return (
     <div>
       <div style={{ paddingTop: 8 }}>
-        <Button
-          onClick={() => setOpenDetail({ open: false })}
-          shape="circle"
-          icon={<ArrowLeftOutlined />}
-        />
+        <Button onClick={() => handlePrevious()} shape="circle" icon={<ArrowLeftOutlined />} />
       </div>
       <div className={styles.displaySelectedDate}>
         <p>{substr(openDetail?.currentDay)}</p>
