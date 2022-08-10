@@ -34,9 +34,9 @@ const GlobalHeaderRight: React.FC = () => {
   useEffect(() => {
     connect();
     caxios.get(`/travel/toast`).then((res) => {
-      // const data = res.data.data;
-      // const json = JSON.stringify({ size: data.length, content: data });
-      // sessionStorage.setItem('temp', json);
+      const data = res?.data?.data;
+      const json = JSON.stringify({ size: data.length, content: data });
+      sessionStorage.setItem('temp', json);
     });
   }, []);
 
