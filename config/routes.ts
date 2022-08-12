@@ -25,22 +25,16 @@
     component: './main/Maps',
   },
   {
-    path: '/search',
+    path: '/search/day',
     name: '조회',
     icon: undefined,
-    routes: [
-      { name: '날짜별 조회', path: '/search/day', component: './search/DaySearch' },
-      { name: '금액별 조회', path: '/search/money', component: './search/MoneySearch' },
-    ],
+    component: './search/DaySearch',
   },
   {
     path: '/manage',
     name: '관리',
     icon: undefined,
-    routes: [
-      { name: '일정 관리', path: '/manage/day', component: './manage/DayManage' },
-      { name: '계획 관리', path: '/manage/plan', component: './manage/PlanManage' },
-    ],
+    component: './manage/PlanManage',
   },
   {
     path: '/setting',

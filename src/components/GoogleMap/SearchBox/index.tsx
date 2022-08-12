@@ -31,7 +31,7 @@ const SearchBox = ({ locMarker, setLocMarker, setPlaces }: any) => {
       <StandaloneSearchBox onLoad={onLoad} onPlacesChanged={onPlacesChanged}>
         <input
           type="text"
-          placeholder="Enter the place"
+          placeholder="장소를 입력해주세요."
           style={{
             boxSizing: `border-box`,
             border: `1px solid transparent`,

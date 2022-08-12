@@ -6,10 +6,11 @@ import {
   SaveOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Button, Form, Input, InputNumber, Select, TimePicker } from 'antd';
+import { Button, Form, Input, InputNumber, Select, TimePicker, message } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
 import React from 'react';
+import { getZoom } from '../../utils';
 import styles from './index.less';
 import { theme } from './theme';
 import { vehicle } from './vehicle';
@@ -19,6 +20,7 @@ const RightSection = ({
   setHasPrevious,
   setPlanDetail,
   planDetail,
+  setLocMarker,
   openDetail,
   detailForm,
 }: any) => {
@@ -104,6 +106,50 @@ const RightSection = ({
         'Content-Type': 'application/json',
       },
     });
+
+    message.success('저장이 완료 되었습니다.');
+
+    setHasPrevious({
+      flag: false,
+      method: '',
+    });
+
+    caxios.get(`/planDetail`).then((res) => {
+      const resData = res.data?.data;
+      const plans = resData?.plans;
+      const planDetails = resData?.planDetails;
+
+      setPlanDetail(planDetails);
+
+      planDetails && planDetails.length !== 0
+        ? planDetailLocation(planDetails)
+        : navigator.geolocation.getCurrentPosition(userLocation);
+    });
+  };
+
+  // 최초 로딩시 사용자의 위치정보를 가져온다.
+  const planDetailLocation = (planDetails: any) => {
+    let locArr: any = planDetails?.map((data: any) => {
+      return { lat: Number.parseFloat(data.lat), lng: Number.parseFloat(data.lng) };
+    });
+
+    setLocMarker({
+      location: locArr,
+      zoom: getZoom(locArr),
+    });
+  };
+
+  // 최초 로딩시 사용자의 위치정보를 가져온다.
+  const userLocation = ({ coords }: any) => {
+    setLocMarker({
+      location: [
+        {
+          lat: coords?.latitude,
+          lng: coords?.longitude,
+        },
+      ],
+      zoom: 16,
+    });
   };
 
   const handleUpdate = async () => {
@@ -124,15 +170,23 @@ const RightSection = ({
       },
     });
 
-    let detail: any = [];
-    Object.keys(planDetail).forEach((el) => {
-      if (planDetail[el].planDetailId === data?.planDetailId) {
-        detail.push(data);
-      } else {
-        detail.push(planDetail[el]);
-      }
+    message.success('수정이 완료 되었습니다.');
+
+    caxios.get(`/planDetail`).then((res) => {
+      const resData = res.data?.data;
+      const planDetails = resData?.planDetails;
+
+      setPlanDetail(planDetails);
+
+      planDetails && planDetails.length !== 0
+        ? planDetailLocation(planDetails)
+        : navigator.geolocation.getCurrentPosition(userLocation);
     });
-    setPlanDetail(detail);
+
+    setHasPrevious({
+      flag: false,
+      method: '',
+    });
   };
 
   const convertTime = (arrivalTime: any, departureTime: any) => {
@@ -252,6 +306,9 @@ const RightSection = ({
                 style={{ width: '100%' }}
               />
             </Form.Item>
+            <Form.Item label="메모" name="memo">
+              <Input.TextArea />
+            </Form.Item>
             <Form.Item hidden={true} name="lat" />
             <Form.Item hidden={true} name="lng" />
           </Form>
@@ -260,16 +317,25 @@ const RightSection = ({
     } else {
       return (
         <div style={{ padding: 3 }}>
-          <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 30 }}>여행 정보</div>
+          <div style={{ fontWeight: 800, fontSize: 20, marginBottom: 30 }}>
+            여행 정보
+            <div style={{ float: 'right' }}>
+              <Button
+                onClick={() => {
+                  handleUpdate();
+                }}
+                icon={<SaveOutlined />}
+              >
+                수정
+              </Button>
+            </div>
+          </div>
           <Form
             labelCol={{ span: 9 }}
             name="control-hooks"
             wrapperCol={{ span: 17 }}
             layout="horizontal"
             form={detailForm}
-            onFieldsChange={() => {
-              handleUpdate();
-            }}
           >
             <Form.Item
               label="여행지 명"
@@ -311,6 +377,9 @@ const RightSection = ({
                 style={{ width: '100%' }}
               />
             </Form.Item>
+            <Form.Item label="메모" name="memo">
+              <Input.TextArea />
+            </Form.Item>
             <Form.Item hidden={true} name="lat" />
             <Form.Item hidden={true} name="lng" />
             <Form.Item hidden={true} name="planDetailId" />
@@ -321,6 +390,12 @@ const RightSection = ({
   };
 
   const Content = () => {
+    let day: any = Number.MIN_VALUE;
+    const dayCount = (days: any) => {
+      day = days;
+      return days + 1;
+    };
+
     return hasPrevious?.flag ? (
       <div className={styles.test1} style={{ flex: 1, height: 790 }}>
         <div
@@ -339,7 +414,25 @@ const RightSection = ({
       <div className={styles.test2} style={{ flex: 1, height: 810 }}>
         {planDetail &&
           planDetail?.map((data: any) => {
-            return <PlanDetailForm data={data} key={data?.planDetailId} />;
+            return (
+              <>
+                {data?.days !== day ? (
+                  <div
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 16,
+                      color: 'rgb(59, 89, 152)',
+                      textAlign: 'left',
+                    }}
+                  >
+                    Day-{dayCount(data?.days)} ❤
+                  </div>
+                ) : (
+                  <></>
+                )}
+                <PlanDetailForm data={data} key={data?.planDetailId} />
+              </>
+            );
           })}
       </div>
     );

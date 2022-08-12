@@ -88,6 +88,7 @@ const Container = () => {
         setPlanDetail={setPlanDetail}
         detailForm={detailForm}
         openDetail={openDetail}
+        setLocMarker={setLocMarker}
       />
     </div>
   );
