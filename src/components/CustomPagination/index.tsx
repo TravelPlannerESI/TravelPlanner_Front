@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-
+import styles from './index.less';
 function CustomPagination({ currentPage, pageCount, setPage, totalPage }) {
   // 화면에 보여질 페이지 수 pageCount
   // setPage => state
@@ -18,23 +18,38 @@ function CustomPagination({ currentPage, pageCount, setPage, totalPage }) {
   const rendering = () => {
     const result = [];
     for (let i = startPage; i <= endPage; i++) {
-      result.push(
-        <button key={i} onClick={() => setPage(i)}>
-          {i}
-        </button>,
-      );
+      if (i == curPage)
+        result.push(
+          <button className={styles.active} key={i} onClick={() => setPage(i)}>
+            {i}
+          </button>,
+        );
+      else
+        result.push(
+          <button key={i} onClick={() => setPage(i)}>
+            {i}
+          </button>,
+        );
     }
     return result;
   };
   return (
     <>
-      <button onClick={() => setPage(curPage - 1)} disabled={curPage === 1}>
-        &lt;
-      </button>
-      {rendering()}
-      <button onClick={() => setPage(curPage + 1)} disabled={curPage === totalPage}>
-        &gt;
-      </button>
+      <div className={styles.page_wrap}>
+        <div className={styles.page_nation}>
+          {curPage !== 1 && (
+            <button className={styles.arrowprev} onClick={() => setPage(curPage - 1)}>
+              &lt;
+            </button>
+          )}
+          {rendering()}
+          {curPage !== totalPage && (
+            <button className={styles.arrownext} onClick={() => setPage(curPage + 1)}>
+              &gt;
+            </button>
+          )}
+        </div>
+      </div>
     </>
   );
 }

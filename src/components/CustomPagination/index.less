@@ -1,0 +1,50 @@
+@color1: #e6e6e6;
+@color2: #ffffff;
+@color3: #999999;
+@color4: #cccccc;
+@color5: #42454c;
+
+.page_wrap {
+  font-size: 0;
+  text-align: center;
+}
+.page_nation {
+  display: inline-block;
+  .none {
+    display: none;
+  }
+  button {
+    display: block;
+    float: left;
+    width: 26px;
+    height: 28px;
+    margin: 0 3px;
+    color: @color3;
+    font-size: 13px;
+    line-height: 28px;
+    text-align: center;
+    text-decoration: none;
+    background-color: @color2;
+    border: 1px solid @color1;
+    &.active {
+      color: @color2;
+      background-color: @color5;
+      border: 1px solid @color5;
+    }
+  }
+  .arrow {
+    border: 1px solid @color4;
+  }
+  .prev {
+    margin-right: 7px;
+    background: #f8f8f8;
+  }
+  button[disabled]:disabled {
+    margin-right: 7px;
+    background: #999999;
+  }
+  .next {
+    margin-left: 7px;
+    background: #f8f8f8;
+  }
+}
