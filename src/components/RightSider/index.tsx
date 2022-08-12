@@ -81,7 +81,7 @@ const RightSider = () => {
       <button className="RightSiderbutton" onClick={() => handleClick()}>
         {isOpen.menuName}
       </button>
-      <div className={isOpen.style}>
+      <div className={isOpen.style} style={{ width: '17%' }}>
         <Button type="primary" onClick={() => setVisible(true)}>
           일정추가
         </Button>
