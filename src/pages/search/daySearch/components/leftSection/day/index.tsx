@@ -24,10 +24,12 @@ const Day = ({
   // 리스트를 클릭하면 지도의 위치가 바뀐다.
   const changeCurrentMap = (geometry: any) => {
     setLocMarker({
-      location: {
-        lat: geometry?.location?.lat(),
-        lng: geometry?.location?.lng(),
-      },
+      location: [
+        {
+          lat: geometry?.location?.lat(),
+          lng: geometry?.location?.lng(),
+        },
+      ],
       zoom: 17, // zoom값은 숫자가 커질수록 더 가까이 보인다.
     });
   };
@@ -91,7 +93,7 @@ const Day = ({
     });
   };
 
-  // 최초 로딩시 사용자의 위치정보를 가져온다.
+  // 사용자가 저장한 세부 여행지의 정보가 있으면 그 위치를 marker로 표시해준다.
   const planDetailLocation = (planDetails: any) => {
     let locArr = planDetails?.map((data: any) => {
       return { lat: Number.parseFloat(data.lat), lng: Number.parseFloat(data.lng) };
@@ -105,10 +107,12 @@ const Day = ({
   // 최초 로딩시 사용자의 위치정보를 가져온다.
   const userLocation = ({ coords }: any) => {
     setLocMarker({
-      location: {
-        lat: coords?.latitude,
-        lng: coords?.longitude,
-      },
+      location: [
+        {
+          lat: coords?.latitude,
+          lng: coords?.longitude,
+        },
+      ],
       zoom: 16,
     });
   };

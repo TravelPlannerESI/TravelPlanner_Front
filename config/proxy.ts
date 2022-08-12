@@ -4,6 +4,11 @@ export default {
       target: 'http://localhost:8095',
       changeOrigin: true,
     },
+    // '/site/program/': {
+    //   target: 'https://www.koreaexim.go.kr',
+    //   changeOrigin: true,
+    //   pathRewrite: { '^': '' },
+    // },
   },
   test: {
     '/api/': {

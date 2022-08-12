@@ -8,6 +8,7 @@ import Toast from '../Toast';
 import { Client } from '@stomp/stompjs';
 import caxios from '../../util/caxios';
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 
 export type SiderTheme = 'light' | 'dark';
 
@@ -32,10 +33,15 @@ const GlobalHeaderRight: React.FC = () => {
   };
 
   useEffect(() => {
+    /*    axios
+      .get(
+        `/site/program/financial/exchangeJSON?authkey=vN8UAk24yGSIGADl19RIpyY7zxW7WC15&searchdate=20220808&data=AP01`,
+      )
+      .then((res) => {}); */
     connect();
     caxios.get(`/travel/toast`).then((res) => {
       const data = res?.data?.data;
-      const json = JSON.stringify({ size: data.length, content: data });
+      const json = JSON.stringify({ size: data?.length, content: data });
       sessionStorage.setItem('temp', json);
     });
   }, []);

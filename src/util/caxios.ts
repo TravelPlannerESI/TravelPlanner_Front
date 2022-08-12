@@ -15,7 +15,7 @@ caxios.defaults.headers.common['Content-Type'] = 'application/json; charset=utf-
 caxios.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response.status === 401) {
+    if (error?.response.status === 401) {
       history.push('/nologin/maps');
     }
   },
