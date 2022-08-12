@@ -37,8 +37,8 @@ export const getZoom = (locArr: any) => {
   else if (calc >= 15 && calc < 20) zoom = 10;
   else zoom = 9;
 
-  console.log(calc);
-  console.log(zoom);
+  // console.log(calc);
+  // console.log(zoom);
 
   return zoom;
 };

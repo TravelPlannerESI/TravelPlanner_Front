@@ -50,10 +50,12 @@ const LeftSection = ({
   // 최초 로딩시 사용자의 위치정보를 가져온다.
   const userLocation = ({ coords }: any) => {
     setLocMarker({
-      location: {
-        lat: coords?.latitude,
-        lng: coords?.longitude,
-      },
+      location: [
+        {
+          lat: coords?.latitude,
+          lng: coords?.longitude,
+        },
+      ],
       zoom: 16,
     });
   };
@@ -68,7 +70,7 @@ const LeftSection = ({
 
   const Content = () => {
     return (
-      <div className={styles.test2} style={{ flex: 1, height: 710 }}>
+      <div className={styles.test2} style={{ flex: 1, height: 670 }}>
         {planData?.plans?.map((data: any) => {
           return <PlanDetail data={data} key={data?.currentDay} />;
         })}

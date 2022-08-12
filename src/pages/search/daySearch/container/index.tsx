@@ -58,10 +58,12 @@ const Container = () => {
   // 최초 로딩시 사용자의 위치정보를 가져온다.
   const userLocation = ({ coords }: any) => {
     setLocMarker({
-      location: {
-        lat: coords?.latitude,
-        lng: coords?.longitude,
-      },
+      location: [
+        {
+          lat: coords?.latitude,
+          lng: coords?.longitude,
+        },
+      ],
       zoom: 16,
     });
   };
