@@ -31,22 +31,20 @@ const GlobalHeaderRight: React.FC = () => {
 
     client.activate();
   };
-
+  const [content, setContent] = useState({});
   useEffect(() => {
-    /*    axios
-      .get(
-        `/site/program/financial/exchangeJSON?authkey=vN8UAk24yGSIGADl19RIpyY7zxW7WC15&searchdate=20220808&data=AP01`,
-      )
-      .then((res) => {}); */
     connect();
+
     caxios.get(`/travel/toast`).then((res) => {
       const data = res?.data?.data;
       const json = JSON.stringify({ size: data?.length, content: data });
       sessionStorage.setItem('temp', json);
+      setContent(json);
     });
   }, []);
-
-  const [content, setContent] = useState({});
+  useEffect(() => {
+    console.log(sessionStorage.getItem('plan'));
+  }, [sessionStorage.getItem('plan')]);
 
   const { initialState } = useModel('@@initialState');
 
@@ -63,7 +61,6 @@ const GlobalHeaderRight: React.FC = () => {
 
   const addContent = (data: any) => {
     const item: any = JSON.parse(sessionStorage.getItem('temp'));
-
     sessionStorage.setItem(
       'temp',
       JSON.stringify({ size: item.size + 1, content: [data, ...item.content] }),
@@ -71,11 +68,19 @@ const GlobalHeaderRight: React.FC = () => {
     setContent(item);
   };
 
+  const addPlanMember = (data: any) => {
+    sessionStorage.setItem('plan', JSON.stringify({ data }));
+  };
+
   const subscribe = () => {
     if (client != null) {
       client.subscribe(`/sub/toast/${initialState?.currentUser?.email}`, (data: any) => {
         const body = JSON.parse(data.body);
-        addContent(body);
+        if (body?.alarm) {
+          addContent(body.data);
+        } else {
+          addPlanMember(body.data);
+        }
       });
     }
   };
