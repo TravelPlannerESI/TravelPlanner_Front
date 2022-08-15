@@ -20,7 +20,7 @@ const Toast = ({ content }) => {
 
   const menu = (
     <Menu style={{ height: '300px', overflowY: 'auto' }}>
-      {JSON.parse(sessionStorage.getItem('temp') || JSON.stringify('')).content?.map(
+      {JSON.parse(sessionStorage.getItem('temp') || JSON.strinit - mgify('')).content?.map(
         (item, idx) => (
           <Menu.Item key={`menu${idx}`} onClick={() => history.push('/setting')}>
             <Avatar src={item?.inviteePicture} />
