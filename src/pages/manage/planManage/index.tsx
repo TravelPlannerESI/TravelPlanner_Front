@@ -54,6 +54,15 @@ const PlanManager = () => {
     return current && current <= moment().add(-1, 'days').endOf('day');
   };
 
+  const handleKeyPress = (e) => {
+    if (!!total.sendEmail)
+      if (e.code === 'Enter') {
+        caxios.get(`/users/${total.sendEmail}`).then((res) => {
+          setTotal({ userEmails: res.data.data, sendEmail: '' });
+        });
+      }
+  };
+
   const onCheck = () => {
     const afterData: any = afterform.getFieldsValue();
     if (
@@ -74,14 +83,12 @@ const PlanManager = () => {
       countryIsoAlp2: afterData.countryIsoAlp2,
     };
 
-    if (afterData?.rangeDate && afterData?.rangeDate.size > 0)
-      requestData['startDate'] = requestData['rangeDate'][0].format('YYYY-MM-DD');
-    if (afterData?.rangeDate && afterData?.rangeDate.size > 1)
-      requestData['endDate'] = requestData['rangeDate'][1].format('YYYY-MM-DD');
+    if (afterData?.rangeDate && afterData?.rangeDate.length > 0)
+      requestData['startDate'] = afterData['rangeDate'][0].format('YYYY-MM-DD');
+    if (afterData?.rangeDate && afterData?.rangeDate.length > 1)
+      requestData['endDate'] = afterData['rangeDate'][1].format('YYYY-MM-DD');
 
-    console.log('afterData', afterData);
-
-    // caxios.put('/travel', )
+    caxios.put('/travel', requestData);
   };
 
   return (
@@ -131,6 +138,9 @@ const PlanManager = () => {
               <Form.Item {...formItemLayout} name="membersEmail" label="멤버">
                 <Input.TextArea />
               </Form.Item>
+              <div style={{ marginLeft: '25%', fontWeight: '600', color: 'gray' }}>
+                멤버 : 수락을 했거나 대기중인 상태 입니다.
+              </div>
             </Form>
           </div>
           <div style={{ flex: 1, marginBottom: 30 }}>
