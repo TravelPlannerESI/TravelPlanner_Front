@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import type { Axios } from 'axios';
 import axios from 'axios';
 import { history } from 'umi';
@@ -18,6 +19,7 @@ caxios.interceptors.response.use(
     if (error?.response.status === 401) {
       history.push('/nologin/maps');
     }
+    message.error(error?.response?.data?.message);
   },
 );
 

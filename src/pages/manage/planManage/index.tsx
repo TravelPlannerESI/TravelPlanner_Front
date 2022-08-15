@@ -1,6 +1,7 @@
 import caxios from '@/util/caxios';
 import { Button, Card, Form, Input, InputNumber, Select, DatePicker, message } from 'antd';
 import { RangePickerProps } from 'antd/lib/date-picker';
+import { response } from 'express';
 import moment from 'moment';
 import * as React from 'react';
 
@@ -88,7 +89,19 @@ const PlanManager = () => {
     if (afterData?.rangeDate && afterData?.rangeDate.length > 1)
       requestData['endDate'] = afterData['rangeDate'][1].format('YYYY-MM-DD');
 
-    caxios.put('/travel', requestData);
+    caxios.put('/travel', requestData).then(() => {
+      message.info('수정이 완료되었습니다.');
+      afterform.resetFields();
+      caxios.get('/manage/travel').then((res) => {
+        beforform.setFieldsValue({
+          travelName: res.data.data?.travelName,
+          countryIsoAlp2: res.data.data?.countryIsoAlp2,
+          rangeDate: [moment(res.data.data?.startDate), moment(res.data.data?.endDate)],
+          totalCost: res.data.data?.totalCost,
+          membersEmail: res.data.data.membersEmail,
+        });
+      });
+    });
   };
 
   return (
