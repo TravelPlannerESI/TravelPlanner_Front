@@ -4,26 +4,13 @@ import { BellOutlined } from '@ant-design/icons';
 import caxios from '../../util/caxios';
 
 const Toast = ({ content }) => {
-  // const handler = (message: string) => {
-  //   if (client != null) {
-  //     if (!client.connected) return;
-
-  //     client.publish({
-  //       destination: '/to/liar/start/1',
-  //       body: JSON.stringify({
-  //         message: message,
-  //       }),
-  //     });
-  //   }
-  // };
-
   const menu = (
     <Menu style={{ height: '300px', overflowY: 'auto' }}>
       {JSON.parse(sessionStorage.getItem('temp') || JSON.stringify('')).content?.map(
         (item, idx) => (
           <Menu.Item key={`menu${idx}`}>
             <Avatar src={item?.inviteePicture} />
-            {`  ${item?.invitee}님께서 ${item?.travelName.slice(0, 6)}에 초대하셨습니다.`}
+            {`  ${item?.invitee}님께서 ${item?.travelName?.slice(0, 6)}에 초대하셨습니다.`}
           </Menu.Item>
         ),
       )}
