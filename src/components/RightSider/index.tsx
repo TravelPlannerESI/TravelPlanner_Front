@@ -30,7 +30,7 @@ const RightSider = () => {
 
   useEffect(() => {
     caxios
-      .get(`/travel?size=5&page=0`)
+      .get(`/travel?size=7&page=0`)
       .then((res) => {
         setTravelState(setDataType(res.data.data));
       })
@@ -41,7 +41,7 @@ const RightSider = () => {
 
   useEffect(() => {
     caxios
-      .get(`/travel?size=5&page=${page - 1}`)
+      .get(`/travel?size=7&page=${page - 1}`)
       .then((res) => {
         setTravelState(setDataType(res.data.data));
       })
@@ -86,7 +86,7 @@ const RightSider = () => {
           일정추가
         </Button>
         <TravelFormModal visible={visible} setVisible={setVisible}></TravelFormModal>
-        <div style={{ marginTop: 35 }}>
+        <div style={{ marginTop: 35, height: '685px' }}>
           {travelState?.content?.map((m, idx) => (
             <div className={styles.planDetailContainer} key={idx}>
               <div className={styles.planDetailTitle}>{m.travelName}</div>
