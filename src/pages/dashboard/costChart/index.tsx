@@ -12,7 +12,6 @@ import {
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const CostChart = ({ dashboard }: any) => {
-  console.log(dashboard?.chartData);
   const chartData = dashboard?.chartData;
 
   let map = {};
