@@ -23,8 +23,6 @@ const Container = () => {
   });
 
   useEffect(() => {
-    //
-
     caxios.get(`/planDetail`).then((res) => {
       const resData = res.data?.data;
       const plans = resData?.plans;
@@ -80,7 +78,7 @@ const Container = () => {
         setOpenDetail={setOpenDetail}
         setPlanDetail={setPlanDetail}
       />
-      <MiddleSection locMarker={locMarker} />
+      <MiddleSection locMarker={locMarker} setHasPrevious={setHasPrevious} />
       <RightSection
         hasPrevious={hasPrevious}
         setHasPrevious={setHasPrevious}

@@ -29,10 +29,12 @@ const LeftSection = ({
 
   const handleChangePlanDetail = async (planId: any) => {
     caxios.get(`/planDetail/${planId}`).then((res) => {
-      setPlanDetail(res.data.data);
-      res.data.data && res.data.data.length !== 0
-        ? planDetailLocation(res.data.data)
-        : navigator.geolocation.getCurrentPosition(userLocation);
+      if (res?.data.data !== undefined) {
+        setPlanDetail(res.data.data);
+        res.data.data.length !== 0
+          ? planDetailLocation(res.data.data)
+          : navigator.geolocation.getCurrentPosition(userLocation);
+      }
     });
   };
 
