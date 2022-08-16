@@ -2,7 +2,7 @@ import GMap from '@/components/GoogleMap/GMap';
 import { GoogleMap, Marker } from '@react-google-maps/api';
 import styles from './index.less';
 
-const MiddleSection = ({ locMarker }: any) => {
+const MiddleSection = ({ locMarker, setHasPrevious }: any) => {
   return (
     <div className={styles.searchMiddleSection}>
       <GMap>
@@ -19,6 +19,12 @@ const MiddleSection = ({ locMarker }: any) => {
                 icon={{
                   url: require(`@/components/GoogleMap/asset/pin2-1.png`),
                 }}
+                // onClick={() =>
+                //   setHasPrevious({
+                //     flag: true,
+                //     method: '',
+                //   })
+                // }
               />
             );
           })}
