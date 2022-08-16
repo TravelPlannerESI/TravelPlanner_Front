@@ -12,7 +12,7 @@ const DashBoard: React.FC = () => {
   useEffect(() => {
     caxios.get(`/travel/dashboard`).then((res) => {
       let data = res?.data?.data;
-      // console.log(data);
+      console.log(data);
       setDashBoard(data);
     });
   }, []);

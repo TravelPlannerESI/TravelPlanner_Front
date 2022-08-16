@@ -15,10 +15,18 @@ const Cards = ({ dashboard }: any) => {
     return dDay;
   };
 
+  const exchangeRateInfo = () => {
+    let exchangeRate = dashboard?.fxrt;
+    let currencyUnit = dashboard?.mtryUtNm;
+    let countryName = dashboard?.countryName;
+
+    return `1  ${currencyUnit} = ${exchangeRate}원`;
+  };
+
   return (
     <div>
-      <Row gutter={16}>
-        <Col span={6}>
+      <Row>
+        <Col className={styles.cardSize}>
           <Card className={styles.card}>
             <Statistic
               title="총 예상 비용"
@@ -29,33 +37,18 @@ const Cards = ({ dashboard }: any) => {
           </Card>
         </Col>
 
-        <Col span={6}>
+        <Col className={styles.cardSize}>
           <Card className={styles.card}>
             <Statistic
-              title="환율 정보"
-              value={9.3}
+              title={'환율정보 ( 1 ' + dashboard?.mtryUtNm + ')'}
+              value={exchangeRateInfo()}
               precision={2}
               valueStyle={{ color: '#cf1322' }}
-              prefix={<ArrowDownOutlined />}
-              suffix="%"
             />
           </Card>
         </Col>
 
-        <Col span={6}>
-          <Card className={styles.card}>
-            <Statistic
-              title="날씨 정보"
-              value={9.3}
-              precision={2}
-              valueStyle={{ color: '#cf1322' }}
-              prefix={<ArrowDownOutlined />}
-              suffix="%"
-            />
-          </Card>
-        </Col>
-
-        <Col span={6}>
+        <Col className={styles.cardSize}>
           <Card className={styles.card}>
             <Statistic
               title="D-Day"
