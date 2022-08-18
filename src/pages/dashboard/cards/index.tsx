@@ -1,6 +1,5 @@
-import { ArrowDownOutlined, PlusOutlined } from '@ant-design/icons';
 import { Card, Col, Row, Statistic } from 'antd';
-import React from 'react';
+import { currencyMapping } from './utils';
 import styles from './index.less';
 
 const Cards = ({ dashboard }: any) => {
@@ -12,15 +11,22 @@ const Cards = ({ dashboard }: any) => {
 
     let dDay = Math.round((nowDate - start) / (1000 * 60 * 60 * 24));
 
-    return dDay;
+    let res = '';
+    if (dDay < 0) res = `${Math.abs(dDay)}일 남았습니다.`;
+    else res = `${Math.abs(dDay)}일 지났습니다.`;
+
+    return res;
   };
 
   const exchangeRateInfo = () => {
-    let exchangeRate = dashboard?.fxrt;
-    let currencyUnit = dashboard?.mtryUtNm;
-    let countryName = dashboard?.countryName;
+    if (dashboard?.fxrt == null) {
+      return '환율 정보가 없습니다.';
+    } else {
+      let exchangeRate = dashboard?.fxrt;
+      let currencyUnit = dashboard?.currSgn;
 
-    return `1  ${currencyUnit} = ${exchangeRate}원`;
+      return `1  ${currencyMapping[currencyUnit]} = ${exchangeRate}원`;
+    }
   };
 
   return (
@@ -28,8 +34,9 @@ const Cards = ({ dashboard }: any) => {
       <Row>
         <Col className={styles.cardSize}>
           <Card className={styles.card}>
+            {/* ward */}
             <Statistic
-              title="총 예상 비용"
+              title="초기 설정/세팅 비용"
               value={dashboard?.totalCost}
               valueStyle={{ color: 'black' }}
               suffix="원"
@@ -40,7 +47,7 @@ const Cards = ({ dashboard }: any) => {
         <Col className={styles.cardSize}>
           <Card className={styles.card}>
             <Statistic
-              title={'환율정보 ( 1 ' + dashboard?.mtryUtNm + ')'}
+              title={'환율정보'}
               value={exchangeRateInfo()}
               precision={2}
               valueStyle={{ color: '#cf1322' }}
@@ -54,7 +61,6 @@ const Cards = ({ dashboard }: any) => {
               title="D-Day"
               value={getDate(dashboard?.startDate)}
               valueStyle={{ color: '#cf1322', fontSize: 23.5 }}
-              suffix={getDate(dashboard?.startDate) < 0 ? '일 남았습니다.' : '일 지났습니다.'}
             />
           </Card>
         </Col>
