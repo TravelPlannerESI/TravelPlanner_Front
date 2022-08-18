@@ -35,6 +35,13 @@ const CostChart = ({ dashboard }: any) => {
 
   const options = {
     responsive: true,
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 50000,
+        },
+      },
+    },
     plugins: {
       legend: {
         display: false,

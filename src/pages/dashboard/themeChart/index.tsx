@@ -1,6 +1,5 @@
 import { Bar } from 'react-chartjs-2';
 import { theme } from './theme';
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -44,7 +43,14 @@ const ThemeChart = ({ dashboard }: any) => {
   };
 
   const options = {
-    responsive: true,
+    // responsive: true,
+    scales: {
+      y: {
+        ticks: {
+          stepSize: 1,
+        },
+      },
+    },
     plugins: {
       legend: {
         display: false,

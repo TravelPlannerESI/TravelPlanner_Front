@@ -17,51 +17,6 @@ const Setting = () => {
       menuName: '내가 초대된 여행',
       render: <InvitedTravel />,
     },
-    {
-      menuId: 'menu3',
-      menuName: 'asd1',
-      render: <div>asd1</div>,
-    },
-    {
-      menuId: 'menu4',
-      menuName: 'asd2',
-      render: <div>asd2</div>,
-    },
-    {
-      menuId: 'menu5',
-      menuName: 'asd3',
-      render: <div>asd3</div>,
-    },
-    {
-      menuId: 'menu6',
-      menuName: 'asd4',
-      render: <div>asd4</div>,
-    },
-    {
-      menuId: 'menu7',
-      menuName: 'asd5',
-      render: <div>asd5</div>,
-    },
-    {
-      menuId: 'menu8',
-      menuName: 'asd6',
-      render: <div>asd6</div>,
-    },
-    {
-      menuId: 'menu9',
-      menuName: 'asd7',
-      render: <div>asd7</div>,
-    },
-    {
-      menuId: 'menu10',
-      menuName: 'asd8',
-      render: <div>asd8</div>,
-    },
-    {
-      menuId: 'menu11',
-      menuName: 'asd9',
-      render: <div>asd9</div>,
-    },
   ]);
 
   return (
