@@ -20,16 +20,14 @@ const Toast = ({ content }) => {
 
   const menu = (
     <Menu style={{ height: '300px', overflowY: 'auto' }}>
-      {JSON.parse(sessionStorage.getItem('temp') || JSON.strinit - mgify('')).content?.map(
-        (item, idx) => (
-          <Menu.Item key={`menu${idx}`} onClick={() => history.push('/setting')}>
-            <Avatar src={item?.inviteePicture} />
-            {`  ${item?.invitee}님께서 ${
-              item?.travelName.length > 7 ? item?.travelName.slice(0, 6) + '...' : item?.travelName
-            }에 초대하셨습니다.`}
-          </Menu.Item>
-        ),
-      )}
+      {JSON.parse(sessionStorage.getItem('temp'))?.content?.map((item, idx) => (
+        <Menu.Item key={`menu${idx}`} onClick={() => history.push('/setting')}>
+          <Avatar src={item?.inviteePicture} />
+          {`  ${item?.invitee}님께서 ${
+            item?.travelName.length > 7 ? item?.travelName.slice(0, 6) + '...' : item?.travelName
+          }에 초대하셨습니다.`}
+        </Menu.Item>
+      ))}
     </Menu>
   );
 
