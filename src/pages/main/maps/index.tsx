@@ -1,5 +1,5 @@
 import Footer from '@/components/Footer';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useModel } from 'umi';
 import styles from './index.less';
 import GlobalHeaderRight from '@/components/RightContent';
@@ -7,11 +7,43 @@ import GoogleMaps from '../googlemaps';
 import TravelFormModal from '@/components/TravelFormModal';
 import RightSider from '@/components/RightSider';
 import { useState } from 'react';
+import { getSession } from '@/util/sessionSt';
+import InviteModal from './inviteModal';
+import caxios from '@/util/caxios';
 
 const Maps: React.FC = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
   const [visible, setVisible] = useState<boolean>(false);
   const { REACT_APP_ENV } = process.env;
+  const [invite, setInvite] = useState({
+    visible: false,
+    travelName: null,
+    travelId: null,
+    startDate: null,
+    endDate: null,
+    email: null,
+  });
+
+  const fetchInviteCode = async () => {
+    if (getSession('inviteCode')) {
+      const data: any = await caxios.get(`/travel/${getSession('inviteCode')}`);
+
+      if (data?.status === 200) {
+        setInvite({
+          visible: true,
+          travelName: data?.data?.data?.travelName,
+          travelId: data?.data?.data?.travelId,
+          startDate: data?.data?.data?.startDate,
+          endDate: data?.data?.data?.endDate,
+          email: data?.data?.data?.email,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchInviteCode();
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -37,6 +69,7 @@ const Maps: React.FC = () => {
         </div>
       </div>
       <div className={styles.content}>
+        {invite?.visible && <InviteModal invite={invite} setInvite={setInvite} />}
         <RightSider />
         <GoogleMaps />
       </div>

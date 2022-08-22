@@ -7,6 +7,7 @@ import { history } from 'umi';
 import defaultSettings from '../config/defaultSettings';
 import { currentUser as queryCurrentUser } from './services/ant-design-pro/api';
 import caxios from './util/caxios';
+import { setSession } from './util/sessionSt';
 
 const loginPath = '/nologin/maps';
 
@@ -63,6 +64,10 @@ export async function getInitialState(gubun?: boolean): Promise<{
 
 // eslint-disable-next-line @typescript-eslint/no-shadow
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
+  const searchParam = (key: any) => {
+    return new URLSearchParams(location.search).get(key);
+  };
+
   return {
     rightContentRender: () => <RightContent currentUser={initialState?.currentUser} />,
 
@@ -73,6 +78,11 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
     footerRender: () => <Footer />,
     onPageChange: async () => {
       const { location } = history;
+
+      if (searchParam('inviteCode')) {
+        const inviteCode: any = searchParam('inviteCode');
+        setSession(inviteCode);
+      }
 
       if (!initialState?.currentUser && location.pathname !== loginPath) {
         const userInfo: any = await initialState?.fetchUserInfo?.();
