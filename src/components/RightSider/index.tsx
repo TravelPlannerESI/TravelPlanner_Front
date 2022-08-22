@@ -85,7 +85,12 @@ const RightSider = () => {
         <Button type="primary" onClick={() => setVisible(true)}>
           일정추가
         </Button>
-        <TravelFormModal visible={visible} setVisible={setVisible}></TravelFormModal>
+        <TravelFormModal
+          visible={visible}
+          setVisible={setVisible}
+          setTravelState={setTravelState}
+          page={page}
+        />
         <div style={{ marginTop: 35, height: '685px' }}>
           {travelState?.content?.map((m, idx) => (
             <div className={styles.planDetailContainer} key={idx}>
