@@ -66,9 +66,10 @@ const PlanManager = () => {
 
   const onCheck = () => {
     const afterData: any = afterform.getFieldsValue();
+    console.log('afterData', afterData);
     if (
       !afterData.countryIsoAlp2 &&
-      !afterData.membersEmail &&
+      (!afterData.membersEmail || afterData.membersEmail?.length === 0) &&
       !afterData.rangeDate &&
       !afterData.totalCost &&
       !afterData.travelName
@@ -89,18 +90,20 @@ const PlanManager = () => {
     if (afterData?.rangeDate && afterData?.rangeDate.length > 1)
       requestData['endDate'] = afterData['rangeDate'][1].format('YYYY-MM-DD');
 
-    caxios.put('/travel', requestData).then(() => {
-      message.info('수정이 완료되었습니다.');
-      afterform.resetFields();
-      caxios.get('/manage/travel').then((res) => {
-        beforform.setFieldsValue({
-          travelName: res.data.data?.travelName,
-          countryIsoAlp2: res.data.data?.countryIsoAlp2,
-          rangeDate: [moment(res.data.data?.startDate), moment(res.data.data?.endDate)],
-          totalCost: res.data.data?.totalCost,
-          membersEmail: res.data.data.membersEmail,
+    caxios.put('/travel', requestData).then((e: any) => {
+      if (e) {
+        message.info('수정이 완료되었습니다.');
+        afterform.resetFields();
+        caxios.get('/manage/travel').then((res) => {
+          beforform.setFieldsValue({
+            travelName: res.data.data?.travelName,
+            countryIsoAlp2: res.data.data?.countryIsoAlp2,
+            rangeDate: [moment(res.data.data?.startDate), moment(res.data.data?.endDate)],
+            totalCost: res.data.data?.totalCost,
+            membersEmail: res.data.data.membersEmail,
+          });
         });
-      });
+      }
     });
   };
 
