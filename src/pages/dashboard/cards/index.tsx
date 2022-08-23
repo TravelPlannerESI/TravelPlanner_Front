@@ -19,12 +19,15 @@ const Cards = ({ dashboard }: any) => {
   };
 
   const exchangeRateInfo = () => {
-    if (dashboard?.fxrt == null) {
-      return '환율 정보가 없습니다.';
-    } else {
-      let exchangeRate = dashboard?.fxrt;
-      let currencyUnit = dashboard?.currSgn;
+    console.log(dashboard);
+    let exchangeRate = dashboard?.fxrt;
+    let currencyUnit = dashboard?.currSgn;
 
+    if (dashboard?.currSgn == null) {
+      return '환율 정보가 없습니다.';
+    } else if (currencyMapping[currencyUnit] === undefined) {
+      return `1  ${currencyUnit} = ${exchangeRate}원`;
+    } else {
       return `1  ${currencyMapping[currencyUnit]} = ${exchangeRate}원`;
     }
   };

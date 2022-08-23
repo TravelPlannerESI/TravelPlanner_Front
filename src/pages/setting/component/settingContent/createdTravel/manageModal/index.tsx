@@ -144,7 +144,7 @@ const ManageModal = ({ detailData, setDetailData, modalVisible, setModalVisible 
       ]}
     >
       <div>
-        초대 코드
+        초대 URL
         <br />
         <Input readOnly={true} defaultValue={detailData.inviteCode} style={{ width: '60%' }} />
         <CopyToClipboard text={detailData.inviteCode}>
