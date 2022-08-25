@@ -90,6 +90,7 @@ const RightSider = () => {
           setVisible={setVisible}
           setTravelState={setTravelState}
           page={page}
+          setPageData={setDataType}
         />
         <div style={{ marginTop: 35, height: '685px' }}>
           {travelState?.content?.map((m, idx) => (
