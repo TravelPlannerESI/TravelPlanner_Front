@@ -23,7 +23,7 @@ const formTailLayout = {
   wrapperCol: { span: 10, offset: 10 },
 };
 
-const TravelFormModal = ({ visible, setVisible }: any) => {
+const TravelFormModal = ({ visible, setVisible, setTravelState, page }: any) => {
   const [form] = Form.useForm();
 
   const afterClose = () => {
@@ -31,7 +31,23 @@ const TravelFormModal = ({ visible, setVisible }: any) => {
     setVisible(false);
   };
 
+  const setPageData = (res: any) => {
+    const newObj = {};
+    newObj['totalCount'] = res.totalElements;
+    newObj['totalPages'] = res.totalPages;
+    newObj['content'] = res.content;
+    return newObj;
+  };
+
   const success = (inviteCode: any) => {
+    caxios
+      .get(`/travel?size=7&page=${page - 1}`)
+      .then((res) => {
+        setTravelState(setPageData(res.data.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     Modal.success({
       content: (
         <>
