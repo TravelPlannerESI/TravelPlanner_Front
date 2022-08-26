@@ -8,7 +8,6 @@ import Toast from '../Toast';
 import { Client } from '@stomp/stompjs';
 import caxios from '../../util/caxios';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 
 export type SiderTheme = 'light' | 'dark';
 
