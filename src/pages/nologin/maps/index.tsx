@@ -1,17 +1,11 @@
 import Footer from '@/components/Footer';
 import { Button } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useModel, history } from 'umi';
+import React, { useState } from 'react';
+import GoogleMaps from '../googlemaps';
 import LoginModal from '../loginModal';
 import styles from './index.less';
-import caxios from '@/util/caxios';
-import GoogleMaps from '../googlemaps';
 
 const Maps: React.FC = () => {
-  const { initialState, setInitialState } = useModel('@@initialState');
-
-  const { REACT_APP_ENV } = process.env;
-
   const [visible, setVisible] = useState<boolean>(false);
 
   return (

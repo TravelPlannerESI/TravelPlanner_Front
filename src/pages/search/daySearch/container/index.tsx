@@ -1,12 +1,11 @@
 import caxios from '@/util/caxios';
 import { Form } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { useModel } from 'umi';
+import { useEffect, useState } from 'react';
 import LeftSection from '../components/leftSection';
 import MiddleSection from '../components/middleSection';
 import RightSection from '../components/rightSection';
-import styles from './index.less';
 import { getZoom, setTravelDate } from '../utils';
+import styles from './index.less';
 
 const Container = () => {
   const [locMarker, setLocMarker] = useState<any>(); // 지도에 marker를 찍기위한 좌표정보를 담는다.

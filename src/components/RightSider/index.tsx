@@ -1,12 +1,12 @@
-import { useState, useEffect } from 'react';
-import './style.css';
 import TravelFormModal from '@/components/TravelFormModal';
-import { Button, Card } from 'antd';
-import { history, useModel } from 'umi';
-import styles from './index.less';
-import { DragOutlined, SettingOutlined } from '@ant-design/icons';
 import caxios from '@/util/caxios';
+import { SettingOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
+import { useEffect, useState } from 'react';
+import { history } from 'umi';
 import CustomPagination from '../CustomPagination';
+import styles from './index.less';
+import './style.css';
 
 const RightSider = () => {
   const [isOpen, setIsOpen] = useState({
@@ -14,8 +14,6 @@ const RightSider = () => {
     menuStatus: 'close',
     menuName: '닫기',
   });
-
-  const { initialState, setInitialState } = useModel('@@initialState');
 
   const [travelState, setTravelState] = useState<any>([]);
   const [page, setPage] = useState<number>(1);

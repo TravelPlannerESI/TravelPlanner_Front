@@ -6,10 +6,9 @@ import {
   SaveOutlined,
   SettingOutlined,
 } from '@ant-design/icons';
-import { Button, Form, Input, InputNumber, Select, TimePicker, message } from 'antd';
+import { Button, Form, Input, InputNumber, message, Select, TimePicker } from 'antd';
 import axios from 'axios';
 import moment from 'moment';
-import React from 'react';
 import { getZoom } from '../../utils';
 import styles from './index.less';
 import { theme } from './theme';
