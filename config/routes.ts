@@ -6,7 +6,7 @@
       {
         name: 'nologin-maps',
         path: '/nologin/maps',
-        component: './nologin/Maps',
+        component: './nologin/maps',
       },
       {
         component: './404',
@@ -22,19 +22,19 @@
   {
     path: '/',
     layout: false,
-    component: './main/Maps',
+    component: './main/maps',
   },
   {
     path: '/search/day',
     name: '조회',
     icon: undefined,
-    component: './search/DaySearch',
+    component: './search/daySearch',
   },
   {
     path: '/manage',
     name: '관리',
     icon: undefined,
-    component: './manage/PlanManage',
+    component: './manage/planManage',
   },
   {
     path: '/setting',

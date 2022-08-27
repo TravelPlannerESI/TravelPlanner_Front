@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { GoogleMap, Marker } from '@react-google-maps/api';
-import GMap from '@/components/GoogleMap/gmap';
 import caxios from '@/util/caxios';
 import CountryInfoArea from './countryInfoArea';
 import CovidCountryInfo from '@/components/GoogleMap/covidCountryInfo';
+import GMap from '@/components/GoogleMap/GMap';
 
 const defaultCenter: { lat: number; lng: number } = {
   lat: 37,
